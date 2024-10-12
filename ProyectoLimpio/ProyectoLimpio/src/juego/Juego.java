@@ -13,6 +13,8 @@ public class Juego extends InterfaceJuego
 	
 	// Variables y métodos propios de cada grupo
 	// ...
+	private Personaje personaje;
+	
 	
 	Juego()
 	{
@@ -21,7 +23,7 @@ public class Juego extends InterfaceJuego
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
-
+		this.personaje = new Personaje(entorno.ancho()/2, entorno.alto() - 200, 30, 45, 3);
 		// Inicia el juego!
 		this.entorno.iniciar();
 	}
@@ -36,7 +38,21 @@ public class Juego extends InterfaceJuego
 	{
 		// Procesamiento de un instante de tiempo
 		// ...
+		personaje.dibujarse(entorno);
 		
+		
+		//Colisiones barra - entorno
+				if(entorno.estaPresionada(entorno.TECLA_DERECHA) && !personaje.colisionaPorDerecha(entorno) /*&& !personaje.colisionaPorDerecha(pelota)*/)
+					personaje.moverDerecha();
+				
+				if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA) && !personaje.colisionaPorIzquierda(entorno) /*&& !personaje.colisionaPorIzquierda(pelota)^*/)
+					personaje.moverIzquierda();
+				
+				if(entorno.estaPresionada(entorno.TECLA_ARRIBA) && !personaje.colisionaPorArriba(entorno) /*&& !barra.colisionaPorIzquierda(pelota)*/)
+					personaje.moverArriba();
+
+				if(entorno.estaPresionada(entorno.TECLA_ABAJO) && !personaje.colisionaPorAbajo(entorno) /*&& !barra.colisionaPorIzquierda(pelota)*/)
+					personaje.moverAbajo();
 	}
 	
 
