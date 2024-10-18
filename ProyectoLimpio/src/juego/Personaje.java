@@ -10,14 +10,17 @@ public class Personaje {
 	private int ancho;
 	private int alto;
 	private int velocidad;
+	private boolean estaSaltando;
+    private double alturaMaxDeSalto;
 	
-	
-	public Personaje(int x, int y, int ancho, int alto) {
+	public Personaje(int x, int y, int ancho, int alto, boolean estaSaltando, double alturaMaxDeSalto) {
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
 		this.velocidad=4;
+		this.estaSaltando = estaSaltando;
+		this.alturaMaxDeSalto = alturaMaxDeSalto;
 	}
 
 	
@@ -80,6 +83,8 @@ public class Personaje {
 		this.y-=velocidad;				
 	}
 	
+	
+	
 	public boolean estaColisionandoPorAbajo(Entorno e) {
 		if(this.y+(this.alto/2) >= e.alto()) {
 			return true;
@@ -106,6 +111,7 @@ public class Personaje {
 		return false;
 	}
 
+	
 
 	public boolean estaColisionandoPorArriba(Isla[] islas) {
 		for(Isla isla : islas) {
@@ -182,7 +188,21 @@ public class Personaje {
 
 	
 	
-	
+	public boolean getEstaSaltando() {
+		return estaSaltando;
+	}
+
+	public double getAlturaMaxDeSalto() {
+		return alturaMaxDeSalto;
+	}
+
+	public void setEstaSaltando(boolean estaSaltando) {
+		this.estaSaltando = estaSaltando;
+	}
+
+	public void setAlturaMaxDeSalto(double alturaMaxDeSalto) {
+		this.alturaMaxDeSalto = alturaMaxDeSalto;
+	}
 	
 	
 	
