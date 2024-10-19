@@ -12,6 +12,7 @@ public class Juego extends InterfaceJuego
 	private Entorno entorno;
 	private Personaje pep;
 	private Isla[] islas;
+	private Tortuga tortugas;
 	
 	// Variables y métodos propios de cada grupo
 	// ...
@@ -23,8 +24,9 @@ public class Juego extends InterfaceJuego
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
-		pep = new Personaje(entorno.ancho()/2, entorno.alto()/2- 100, 20, 40, 0, false, 0);
+		pep = new Personaje(entorno.ancho()/2, entorno.alto()/2- 100, 20, 40, 0, false);
 		islas=crearIslas(entorno);
+		tortugas=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 80, 27, 50, 0, false, 0);
 
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -53,15 +55,17 @@ public class Juego extends InterfaceJuego
 			}
 		}
 		
+	
+		tortugas.dibujar(entorno);				
+		
+		
+		
+		
+		
+		
+		
 		//pep - entorno - islas
-		/*
-		if(entorno.estaPresionada(entorno.TECLA_ARRIBA)&& !pep.estaColisionandoPorArriba(entorno) && !pep.estaColisionandoPorArriba(islas)) {
-			pep.moverHaciaArriba(entorno);
-		}
-		if(entorno.estaPresionada(entorno.TECLA_ABAJO)&& !pep.estaColisionandoPorAbajo(entorno) && !pep.estaColisionandoPorAbajo(islas)) {
-			pep.moverHaciaAbajo(entorno);
-		}
-		*/
+		
 		
 		if(entorno.estaPresionada(entorno.TECLA_DERECHA) && !pep.estaColisionandoPorDerecha(entorno) && !pep.estaColisionandoPorDerecha(islas)) {
 			pep.moverDerecha(entorno);
@@ -74,13 +78,12 @@ public class Juego extends InterfaceJuego
 		
 		//pep - salto -- gravedad
 		
-		//esto hace que el personaje caiga y salte, pero todavia no cae si esta en el aire
+		//esto hace que el personaje caiga y salte
 		if (!pep.getEstaSaltando()) {
 			if(!pep.estaColisionandoPorAbajo(islas) ) {
 				pep.moverHaciaAbajo(entorno);
 			}
 		}
-		
 		
 		if(entorno.sePresiono(entorno.TECLA_ESPACIO) && pep.estaColisionandoPorAbajo(islas) ) {
 			pep.setEstaSaltando(true);
@@ -103,87 +106,31 @@ public class Juego extends InterfaceJuego
 		}
 		
 		
-		/*
-		
-		
-		
-		
-		
-		if(pep.getEstaSaltando()) {
-			if(pep.getY() > 50) {
-				pep.moverHaciaAbajo(entorno);
-			}else {
-				pep.setEstaSaltando(false);
-				
+		//tortugas - pep- islas 
+		// las tortugas caen
+		if (!tortugas.getEstaCayendo()) {
+			if(!tortugas.estaColisionandoPorAbajo(islas) ) {
+				tortugas.moverHaciaAbajo(entorno);
 			}
-		}
+		}		
 		
-		
-		
-		
-		
-		
-		if (pep.getEstaSaltando()) {
-			pep.setAlturaMaxDeSalto(pep.getY() - pep.getAlto()/2);
-		}
-		
-		
-		
-		
-		if (pep.getAlturaMaxDeSalto()) {
-			if ( !pep.estaColisionandoPorArriba(entorno)) {
-				pep.setAlturaMaxDeSalto(pep.getY(), getAlto()-170);
+		if (tortugas.getEstaCayendo() &&  !tortugas.estaColisionandoPorAbajo(islas)) {
+				tortugas.moverHaciaAbajo(entorno);
+				tortugas.setEstaCayendo(false);
 			}
-			/*
-			else {
-				pep.setEstaSaltando(false);
-			}
-			*/
-
+		
+		//
 		
 		
-		/*
-		
-		if(entorno.sePresiono(entorno.TECLA_ESPACIO) && pep.estaColisionandoPorAbajo(islas) ) {
-			pep.setEstaSaltando(true);
-			//pep.setAlturaMaxDeSalto(pep.getY()+170);
-		}
-		
-		if (pep.getEstaSaltando()) {
-			if (!pep.estaColisionandoPorArriba(islas) && !pep.estaColisionandoPorArriba(entorno)) {
-				pep.setAlturaMaxDeSalto(pep.getY()+170);
-				pep.moverHaciaArriba(entorno) ;
-			}else {
-				pep.setEstaSaltando(false);
-			}
-		}
+	
 		
 		
-		if (pep.getEstaSaltando()) {
-			
-			if (!pep.estaColisionandoPorArriba(islas) && !pep.estaColisionandoPorArriba(entorno)) {
-				pep.setAlturaMaxDeSalto(pep.getY()+170);
-				pep.moverHaciaArriba(entorno) ;
-			}else {
-				pep.setEstaSaltando(false);
-				//pep.setAlturaMaxDeSalto(pep.getY()-170);
-			}
-		}
-		
-		
-		
-		
-		 */
-
 		
 	}
 	
-
-
-
-
-
-
+	
+	
+	
 	public static Isla[] crearIslas(Entorno e) {
 		int pisos=5;
 		Isla[] islas=new Isla[pisos*(pisos+1)/2];
@@ -202,6 +149,9 @@ public class Juego extends InterfaceJuego
 		
 		return islas;
 	}
+	
+
+	
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args)
@@ -209,3 +159,19 @@ public class Juego extends InterfaceJuego
 		Juego juego = new Juego();
 	}
 }
+
+
+
+
+/*
+if(entorno.estaPresionada(entorno.TECLA_ARRIBA)&& !pep.estaColisionandoPorArriba(entorno) && !pep.estaColisionandoPorArriba(islas)) {
+	pep.moverHaciaArriba(entorno);
+}
+if(entorno.estaPresionada(entorno.TECLA_ABAJO)&& !pep.estaColisionandoPorAbajo(entorno) && !pep.estaColisionandoPorAbajo(islas)) {
+	pep.moverHaciaAbajo(entorno);
+}
+*/
+
+
+
+
