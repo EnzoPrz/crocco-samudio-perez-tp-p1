@@ -23,11 +23,17 @@ public class Juego extends InterfaceJuego
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
-		pep = new Personaje(entorno.ancho()/2, entorno.alto()/2- 100, 20, 40, false, 0);
+		pep = new Personaje(entorno.ancho()/2, entorno.alto()/2- 100, 20, 40, 0, false, 0);
 		islas=crearIslas(entorno);
+
 		// Inicia el juego!
 		this.entorno.iniciar();
+				
 	}
+	
+	
+
+
 
 	/**
 	 * Durante el juego, el método tick() será ejecutado en cada instante y 
@@ -39,13 +45,13 @@ public class Juego extends InterfaceJuego
 	{
 		// Procesamiento de un instante de tiempo
 		// ...
+		
 		pep.dibujar(entorno);
 		for(Isla isla: islas) {
 			if(isla!=null) {
 				isla.dibujar(entorno);				
 			}
 		}
-		
 		
 		//pep - entorno - islas
 		/*
@@ -66,31 +72,118 @@ public class Juego extends InterfaceJuego
 		
 		
 		
-		//pep - salto
-		if(entorno.sePresiono(entorno.TECLA_ESPACIO) && pep.estaColisionandoPorAbajo(islas)) {
-			pep.setAlturaMaxDeSalto(pep.getY()-170);
-			pep.setEstaSaltando(true);
-		} 
-		if (pep.getEstaSaltando()) {
-			if (!pep.estaColisionandoPorArriba(islas) && !pep.estaColisionandoPorArriba(entorno) ) {
-				pep.moverHaciaArriba(entorno);
-			}else {
-				pep.setEstaSaltando(false);
-			}
-		}
+		//pep - salto -- gravedad
+		
+		//esto hace que el personaje caiga y salte, pero todavia no cae si esta en el aire
 		if (!pep.getEstaSaltando()) {
-			if(!pep.estaColisionandoPorAbajo(islas)) {
+			if(!pep.estaColisionandoPorAbajo(islas) ) {
 				pep.moverHaciaAbajo(entorno);
 			}
 		}
 		
 		
+		if(entorno.sePresiono(entorno.TECLA_ESPACIO) && pep.estaColisionandoPorAbajo(islas) ) {
+			pep.setEstaSaltando(true);
+		}
+		
+		if (pep.getEstaSaltando()) {
+			if(entorno.estaPresionada(entorno.TECLA_ABAJO)/*&& pep.estaColisionandoPorArriba(entorno) && pep.estaColisionandoPorArriba(islas)*/) {
+				pep.moverHaciaAbajo(entorno);
+				pep.setEstaSaltando(false);
+			}
+		}
+		
+		if (pep.getEstaSaltando()) {
+			if (!pep.estaColisionandoPorArriba(islas) && !pep.estaColisionandoPorArriba(entorno)&& pep.getY() > 100) {
+				pep.moverHaciaArriba(entorno) ;
+			}else {
+				pep.setEstaSaltando(false);
+				
+			}
+		}
+		
+		
+		/*
 		
 		
 		
+		
+		
+		if(pep.getEstaSaltando()) {
+			if(pep.getY() > 50) {
+				pep.moverHaciaAbajo(entorno);
+			}else {
+				pep.setEstaSaltando(false);
+				
+			}
+		}
+		
+		
+		
+		
+		
+		
+		if (pep.getEstaSaltando()) {
+			pep.setAlturaMaxDeSalto(pep.getY() - pep.getAlto()/2);
+		}
+		
+		
+		
+		
+		if (pep.getAlturaMaxDeSalto()) {
+			if ( !pep.estaColisionandoPorArriba(entorno)) {
+				pep.setAlturaMaxDeSalto(pep.getY(), getAlto()-170);
+			}
+			/*
+			else {
+				pep.setEstaSaltando(false);
+			}
+			*/
+
+		
+		
+		/*
+		
+		if(entorno.sePresiono(entorno.TECLA_ESPACIO) && pep.estaColisionandoPorAbajo(islas) ) {
+			pep.setEstaSaltando(true);
+			//pep.setAlturaMaxDeSalto(pep.getY()+170);
+		}
+		
+		if (pep.getEstaSaltando()) {
+			if (!pep.estaColisionandoPorArriba(islas) && !pep.estaColisionandoPorArriba(entorno)) {
+				pep.setAlturaMaxDeSalto(pep.getY()+170);
+				pep.moverHaciaArriba(entorno) ;
+			}else {
+				pep.setEstaSaltando(false);
+			}
+		}
+		
+		
+		if (pep.getEstaSaltando()) {
+			
+			if (!pep.estaColisionandoPorArriba(islas) && !pep.estaColisionandoPorArriba(entorno)) {
+				pep.setAlturaMaxDeSalto(pep.getY()+170);
+				pep.moverHaciaArriba(entorno) ;
+			}else {
+				pep.setEstaSaltando(false);
+				//pep.setAlturaMaxDeSalto(pep.getY()-170);
+			}
+		}
+		
+		
+		
+		
+		 */
+
 		
 	}
 	
+
+
+
+
+
+
 	public static Isla[] crearIslas(Entorno e) {
 		int pisos=5;
 		Isla[] islas=new Isla[pisos*(pisos+1)/2];
@@ -99,10 +192,10 @@ public class Juego extends InterfaceJuego
 		int indice=0;
 		for(int i=1 ;i<=pisos; i++) {
 			y=y+100;
-			int expansion=-50*i;
+			int expansion=-25*i;
 			for(int j=1 ; j<=i; j++) {
 				x=(e.ancho()-expansion)/(i+1)*j+expansion/2;
-				islas[indice]= new Isla(x,y,100,30);
+				islas[indice]= new Isla(x,y,110,30);
 				indice++;
 			}
 		}
