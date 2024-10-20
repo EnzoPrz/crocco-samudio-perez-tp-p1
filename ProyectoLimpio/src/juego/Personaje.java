@@ -167,7 +167,9 @@ public class Personaje {
 				}
 			}			
 		}
-		return false;	}
+		return false;
+		
+	}
 	
 	public boolean estaColisionandoPorIzquierda(Isla[] islas) {
 		for(Isla isla : islas) {

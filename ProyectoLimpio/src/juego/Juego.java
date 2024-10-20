@@ -26,7 +26,7 @@ public class Juego extends InterfaceJuego
 		// ...
 		pep = new Personaje(entorno.ancho()/2, entorno.alto()/2- 100, 20, 40, 0, false);
 		islas=crearIslas(entorno);
-		tortugas=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 80, 27, 50, 0, false, 0);
+		tortugas=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 80, 27, 50, 2, false, 0, 0.5);
 
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -111,15 +111,69 @@ public class Juego extends InterfaceJuego
 		if (!tortugas.getEstaCayendo()) {
 			if(!tortugas.estaColisionandoPorAbajo(islas) ) {
 				tortugas.moverHaciaAbajo(entorno);
+				
 			}
 		}		
 		
 		if (tortugas.getEstaCayendo() &&  !tortugas.estaColisionandoPorAbajo(islas)) {
 				tortugas.moverHaciaAbajo(entorno);
 				tortugas.setEstaCayendo(false);
-			}
+		}
+		
+		if (!tortugas.getEstaCayendo()&& tortugas.estaColisionandoPorAbajo(islas)) {
+			tortugas.mover();
+		}
+		
 		
 		//
+		if( tortugas.estaColisionandoPorIzquierda(islas)||tortugas.estaColisionandoPorDerecha(islas)) {
+			tortugas.cambiarMovimientoHorizontal();
+		}
+		/*
+		
+		if(tortugas.estaColisionandoPorIzquierda(islas)) {
+			tortugas.cambiarMovimientoHorizontal();
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//
+		if (!tortugas.getEstaCayendo() &&  tortugas.estaColisionandoPorAbajo(islas)) {
+			if(tortugas.estaColisionandoPorDerecha(islas) || tortugas.estaColisionandoPorIzquierda(islas)) {
+				tortugas.cambiarMovimientoHorizontal();
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		if (!tortugas.getEstaCayendo() &&  tortugas.estaColisionandoPorAbajo(islas) && !tortugas.estaColisionandoPorDerecha(islas)) {
+			tortugas.setEstaCayendo(false);
+			tortugas.moverDerecha(entorno);
+		}
+		else {
+			if (!tortugas.getEstaCayendo() &&  tortugas.estaColisionandoPorAbajo(islas) && !tortugas.estaColisionandoPorIzquierda(islas)) {
+				tortugas.setEstaCayendo(false);
+				tortugas.moverIzquierda(entorno);
+			}
+		}
+		
+		else {
+			tortugas.setEstaCayendo(false);
+			tortugas.moverIzquierda(entorno);
+			
+		}
+			*/
 		
 		
 	
