@@ -11,15 +11,20 @@ public class Personaje {
 	private int alto;
 	private int velocidad;
 	private boolean estaSaltando;
+	private char direccion;
 	
 	
-	public Personaje(int x, int y, int ancho, int alto,int velocidad, boolean estaSaltando) {
+	
+	
+	public Personaje(int x, int y, int ancho, int alto,int velocidad, boolean estaSaltando, char i) {
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
-		this.velocidad=5;
+		this.velocidad=3;
 		this.estaSaltando = estaSaltando;
+		this.direccion= i;
+	
 		
 		
 	}
@@ -83,7 +88,16 @@ public class Personaje {
 	public void moverHaciaArriba(Entorno entorno) {
 		this.y-=velocidad;				
 	}
+
 	
+	public boolean getEstaSaltando() {
+		return estaSaltando;
+	}
+
+	
+	public void setEstaSaltando(boolean estaSaltando) {
+		this.estaSaltando = estaSaltando;
+	}
 	
 	
 	public boolean estaColisionandoPorAbajo(Entorno e) {
@@ -189,19 +203,15 @@ public class Personaje {
 		return false;
 	}
 
-	
-	
-	public boolean getEstaSaltando() {
-		return estaSaltando;
+
+	public char getDireccion() {
+		return direccion;
 	}
 
 	
-	public void setEstaSaltando(boolean estaSaltando) {
-		this.estaSaltando = estaSaltando;
-	}
+	//////////////////////////////////////
 
-	
-	
+
 	
 	
 	
