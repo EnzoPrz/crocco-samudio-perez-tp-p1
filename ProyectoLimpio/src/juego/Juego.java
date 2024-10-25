@@ -14,9 +14,9 @@ public class Juego extends InterfaceJuego{
 	private Isla[] islas;
 	private Tortuga tortugas [] = new Tortuga [6];
 	private Gnomo gnomos;
-//	private DisparoPersonaje disparoPersonaje;
-//	private ItemDisparo itemdisparo;
-//	private int contadorDisparos= 3;
+	private DisparoPersonaje disparoPersonaje;
+	private ItemDisparo itemdisparo;
+	private int contadorDisparos= 3;
 
 	
 	// Variables y métodos propios de cada grupo
@@ -126,29 +126,30 @@ public class Juego extends InterfaceJuego{
 		///////disparo personaje pep ---> disparo
 
 
-//		if(entorno.estaPresionada(entorno.TECLA_SHIFT) && this.disparoPersonaje==null && this.contadorDisparos>0 && this.contadorDisparos<=3) {
-//			this.disparoPersonaje=new DisparoPersonaje (this.pep.getX(), this.pep.getY(), 20, 20,1,2, this.pep.getDireccion());
-//		}
-//		
-//		if(this.disparoPersonaje!=null) {
-//			this.disparoPersonaje.dibujarse(entorno);
-//			this.disparoPersonaje.moverDisparo();
-//			if (this.disparoPersonaje.colisionDisparoBorde(entorno)) {
-//				this.disparoPersonaje=null;
-//				this.contadorDisparos--;
-//			}
-//		}
-//		
-//		//item - disparo
-//		if (contadorDisparos==0) {
-//			this.itemdisparo = new ItemDisparo (entorno.ancho()-35, 350, 18, 18);
-//			this.itemdisparo.aparecer(entorno);
-//		}
-//				
-//		if (this.itemdisparo!=null && colisionar(this.pep.getX(), this.pep.getY(), this.itemdisparo.getX(), this.itemdisparo.getY(), 10)) {
-//			this.itemdisparo=null;
-//			contadorDisparos=3;
-//		}
+		if(entorno.estaPresionado(entorno.BOTON_IZQUIERDO) && this.disparoPersonaje==null && this.contadorDisparos>0 && this.contadorDisparos<=3) {
+			this.disparoPersonaje=new DisparoPersonaje (this.pep.getX(), this.pep.getY(), 20, 20,1,2, this.pep.getDireccion());
+		}
+		
+		
+		if(this.disparoPersonaje!=null) {
+			this.disparoPersonaje.dibujarse(entorno);
+			this.disparoPersonaje.moverDisparo();
+			if (this.disparoPersonaje.colisionDisparoBorde(entorno)) {
+				this.disparoPersonaje=null;
+				this.contadorDisparos--;
+			}
+		}
+		
+		//item - disparo
+		if (contadorDisparos==0) {
+			this.itemdisparo = new ItemDisparo (entorno.ancho()-35, 350, 18, 18);
+			this.itemdisparo.aparecer(entorno);
+		}
+				
+		if (this.itemdisparo!=null && colisionar(this.pep.getX(), this.pep.getY(), this.itemdisparo.getX(), this.itemdisparo.getY(), 10)) {
+			this.itemdisparo=null;
+			contadorDisparos=3;
+		}
 		
 		
 		
