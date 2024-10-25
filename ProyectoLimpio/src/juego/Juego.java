@@ -14,9 +14,10 @@ public class Juego extends InterfaceJuego{
 	private Isla[] islas;
 	private Tortuga tortugas [] = new Tortuga [6];
 	private Gnomo gnomos;
-//	private DisparoPersonaje disparoPersonaje;
-//	private ItemDisparo itemdisparo;
-//	private int contadorDisparos= 3;
+	private BolaDeFuego esfera [] = new BolaDeFuego [8];
+	private DisparoPersonaje disparoPersonaje;
+	private ItemDisparo itemdisparo;
+	private int contadorDisparos= 3;
 
 	
 	// Variables y métodos propios de cada grupo
@@ -33,9 +34,10 @@ public class Juego extends InterfaceJuego{
 		islas=crearIslas(entorno);
 		//tortugas=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 100, 27, 50, 0, true, 0, 0.5, 'd');
 		//tortuga1=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 100, 27, 50, 0, true, 0, 1);
-		RellenarJuegoConDinos(tortugas);
+		RellenarJuegoConTortugas(tortugas);
 		
-		gnomos= new Gnomo(entorno.ancho()/2,entorno.alto()/2-270,20, 60, 0, 0, false, 0.5);
+		//RellenarJuegoConBolasDeFuego(esfera);
+		gnomos= new Gnomo(entorno.ancho()/2,entorno.alto()/2-270,20, 60, 1, 0, false, 0.5, null);
 		//tortugas=crearTortugas(entorno);
 		//RellenarJuegoConDinos(tortugas);
 
@@ -126,29 +128,29 @@ public class Juego extends InterfaceJuego{
 		///////disparo personaje pep ---> disparo
 
 
-//		if(entorno.estaPresionada(entorno.TECLA_SHIFT) && this.disparoPersonaje==null && this.contadorDisparos>0 && this.contadorDisparos<=3) {
-//			this.disparoPersonaje=new DisparoPersonaje (this.pep.getX(), this.pep.getY(), 20, 20,1,2, this.pep.getDireccion());
-//		}
-//		
-//		if(this.disparoPersonaje!=null) {
-//			this.disparoPersonaje.dibujarse(entorno);
-//			this.disparoPersonaje.moverDisparo();
-//			if (this.disparoPersonaje.colisionDisparoBorde(entorno)) {
-//				this.disparoPersonaje=null;
-//				this.contadorDisparos--;
-//			}
-//		}
-//		
-//		//item - disparo
-//		if (contadorDisparos==0) {
-//			this.itemdisparo = new ItemDisparo (entorno.ancho()-35, 350, 18, 18);
-//			this.itemdisparo.aparecer(entorno);
-//		}
-//				
-//		if (this.itemdisparo!=null && colisionar(this.pep.getX(), this.pep.getY(), this.itemdisparo.getX(), this.itemdisparo.getY(), 10)) {
-//			this.itemdisparo=null;
-//			contadorDisparos=3;
-//		}
+		if(entorno.estaPresionada(entorno.TECLA_ESPACIO) && this.disparoPersonaje==null && this.contadorDisparos>0 && this.contadorDisparos<=3) {
+			this.disparoPersonaje=new DisparoPersonaje (this.pep.getX(), this.pep.getY(), 20, 20,1,2, this.pep.getDireccion());
+		}
+		
+		if(this.disparoPersonaje!=null) {
+			this.disparoPersonaje.dibujarse(entorno);
+			this.disparoPersonaje.moverDisparo();
+			if (this.disparoPersonaje.colisionDisparoBorde(entorno)) {
+				this.disparoPersonaje=null;
+				this.contadorDisparos--;
+			}
+		}
+		
+		//item - disparo
+		if (contadorDisparos==0) {
+			this.itemdisparo = new ItemDisparo (entorno.ancho()-35, 350, 18, 18);
+			this.itemdisparo.aparecer(entorno);
+		}
+				
+		if (this.itemdisparo!=null && colisionar(this.pep.getX(), this.pep.getY(), this.itemdisparo.getX(), this.itemdisparo.getY(), 10)) {
+			this.itemdisparo=null;
+			contadorDisparos=3;
+		}
 		
 		
 		
@@ -156,6 +158,32 @@ public class Juego extends InterfaceJuego{
 //////////////////////////////////////tortugas - pep- islas //////////////////////////////////////////////////////////////////////////
 		
 		// las tortugas caen
+		int r;
+		for (r=0;r<=tortugas.length-1;r++) {
+			if(tortugas[r] != null) {
+				tortugas[r].dibujar(entorno);
+			
+			if( !tortugas[r].estaColisionandoPorAbajo(islas)) {
+				tortugas[r].moverHaciaAbajo(entorno);
+				tortugas[r].setEstaCayendo(true);
+			}
+			
+			
+			// SE MUEVEN
+			if (tortugas[r].estaColisionandoPorAbajo(islas)) {
+				tortugas[r].mover();
+			}
+			
+//			if(tortugas[r].estaColisionandoConBordes(islas)) {
+//				tortugas[r].cambiarMovimientoHorizontal();
+//			}
+		
+//			if( tortugas[r].estaColisionandoPorIzquierda(islas)||tortugas[r].estaColisionandoPorDerecha(islas)) {
+//				tortugas[r].cambiarMovimientoHorizontal();
+//			}
+			}
+		}
+		
 	
 //		if(tortugas.getEstaCayendo()&& !tortugas.estaColisionandoPorAbajo(islas)) {
 //				tortugas.moverHaciaAbajo(entorno);
@@ -172,33 +200,33 @@ public class Juego extends InterfaceJuego{
 
 		
 		
-		int r;
-		for (r=0;r<=this.tortugas.length-1;r++) {
-			if(this.tortugas[r] != null) {
-				this.tortugas[r].dibujar(entorno);
-			
-			if (this.tortugas[r].getEstaCayendo()==false) {
-				this.tortugas[r].mover();
-			}
-			
-			if(this.tortugas[r].estaColisionandoPorDerecha(islas) || this.tortugas[r].estaColisionandoPorIzquierda(islas)) {
-				this.tortugas[r].cambiarMovimientoHorizontal();
-			}
-						
-			
-			
-			//COLISION DINOSAURIO-BLOQUEABAJO /si no hay bloque --> CAE	
-			
-			if(this.tortugas[r]!=null && !this.tortugas[r].estaColisionandoPorAbajo(islas)) {
-				this.tortugas[r].moverHaciaAbajo(entorno);
-				this.tortugas[r].setEstaCayendo(true);
-			} else {
-				if(this.tortugas[r]!=null) {
-				this.tortugas[r].setEstaCayendo(false);
-				}
-			}
-			}
-			}
+//		int r;
+//		for (r=0;r<=this.tortugas.length-1;r++) {
+//			if(this.tortugas[r] != null) {
+//				this.tortugas[r].dibujar(entorno);
+//			
+//			if (this.tortugas[r].getEstaCayendo()==false) {
+//				this.tortugas[r].mover();
+//			}
+//			
+//			if(this.tortugas[r].estaColisionandoPorDerecha(islas) || this.tortugas[r].estaColisionandoPorIzquierda(islas)) {
+//				this.tortugas[r].cambiarMovimientoHorizontal();
+//			}
+//						
+//			
+//			
+//			//COLISION DINOSAURIO-BLOQUEABAJO /si no hay bloque --> CAE	
+//			
+//			if(this.tortugas[r]!=null && !this.tortugas[r].estaColisionandoPorAbajo(islas)) {
+//				this.tortugas[r].moverHaciaAbajo(entorno);
+//				this.tortugas[r].setEstaCayendo(true);
+//			} else {
+//				if(this.tortugas[r]!=null) {
+//				this.tortugas[r].setEstaCayendo(false);
+//				}
+//			}
+//			}
+//		}
 		
 ////////////////////////////////  GNOMOS    //////////////////////////////////////////////////////		
 		
@@ -218,13 +246,13 @@ public class Juego extends InterfaceJuego{
 	    
 		
 	    if (!gnomos.getEstaCayendo()&& gnomos.estaColisionandoPorAbajo(islas)) {
-	    	gnomos.mover();
+	    	gnomos.moverRandom(islas);
 		}
 		
 		
-		if(!gnomos.estaColisionandoPorDerecha(pep)) {
-			gnomos.mover();
-		}
+//		if(!gnomos.estaColisionandoPorDerecha(pep)) {
+//			gnomos.mover();
+//		}
 		
 	
 		
@@ -256,29 +284,30 @@ public class Juego extends InterfaceJuego{
 	
 	
 	
-	public void RellenarJuegoConDinos (Tortuga [] t) {
-		double XparaDinoF1 = 45;
-		double YparaDinoF1 = entorno.alto()/2;
-		double XparaDinoF2 = 95;
-		double YparaDinoF2 = entorno.alto()/2;
-		double XparaDinoF3 = 175;
-		double YparaDinoF3 = entorno.alto()/2;
-//		double XparaDinoF4 = 255;
+	public void RellenarJuegoConTortugas (Tortuga [] t) {
+		double XparaTortuF1 = 175;
+		double YparaTortuF1 = entorno.alto()/2;
+		double XparaTortuF2 = 95;
+		double YparaTortuF2 = entorno.alto()/2;
+		double XparaTortuF3 = 45;
+		double YparaTortuF3 = entorno.alto()/2;
+//		double XparaTortuF4 = 255;
 //		double YparaDinoF4 = entorno.alto()/2;
 		
 		for (int i=0; i < t.length; i++) {
 			if (i==0 || i==1) {
-				t[i] = new Tortuga (XparaDinoF1, YparaDinoF1-170, 27, 50, 0.5, 2, 'd', false, 0.5 );
-				XparaDinoF1=entorno.ancho()-XparaDinoF1;
+				t[i] = new Tortuga (XparaTortuF1, YparaTortuF1-170, 27, 50, 0.5, 1, 'd', false, 0.5 );
+				//XparaTortuF1=entorno.ancho()-XparaTortuF1;
+				
 			}
 			
 			if (i==2 || i==3) {
-				t[i] = new Tortuga (XparaDinoF2, YparaDinoF2-170, 27, 50, 0.5, 1.5, 'd', false, 0.5 );
-				XparaDinoF2=entorno.ancho()-XparaDinoF2;
+				t[i] = new Tortuga (XparaTortuF2, YparaTortuF2-170, 27, 50, 0.5, 1.5, 'd', false, 0.5 );
+				//XparaTortuF2=entorno.ancho()-XparaTortuF2;
 			}
 			if (i==4 || i==5) {
-				t[i] = new Tortuga (XparaDinoF3, YparaDinoF3-170, 27, 50, 0.5, 1, 'd', false, 0.5 );
-				XparaDinoF3=entorno.ancho()-XparaDinoF3;
+				t[i] = new Tortuga (XparaTortuF3, YparaTortuF3-170, 27, 50, 0.5, 2, 'd', false, 0.5 );
+				//XparaTortuF3=entorno.ancho()-XparaTortuF3;
 			}
 //			if (i==6 || i==7) {
 //				t[i] = new Tortuga (XparaDinoF4, YparaDinoF4-190, 27, 50, 0.5, 1, 'd', false, 0.5 );
@@ -292,6 +321,14 @@ public class Juego extends InterfaceJuego{
 	
 	
 	
+	
+	public void RellenarJuegoConBolasDeFuego(BolaDeFuego [] esfera) {
+		for (int g=0; g<esfera.length; g++) {
+			if(tortugas[g]!=null && esfera[g]==null) {
+				esfera[g]= new BolaDeFuego (tortugas[g].getX(), tortugas[g].getY()+12, 20,20, tortugas[g].getDireccion(),1,1);
+			}
+		}
+	}
 	
 	
 	

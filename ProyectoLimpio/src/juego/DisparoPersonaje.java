@@ -35,8 +35,8 @@ public DisparoPersonaje(double x, double y, int ancho, int alto, int desplazamie
 		this.direccion = direccion;
 		this.img = new Image[2];
 		
-		this.img[0] = Herramientas.cargarImagen("boladefuegod.png"); // imagen derecha
-		this.img[1] = Herramientas.cargarImagen("boladefuegoi.png"); // imagen izquierda
+		this.img[0] = Herramientas.cargarImagen("boladefuegod.jpg"); // imagen derecha
+		this.img[1] = Herramientas.cargarImagen("boladefuegoi.jpg"); // imagen izquierda
 	}
 
 	public void dibujarse(Entorno e) {

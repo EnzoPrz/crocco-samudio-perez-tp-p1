@@ -10,26 +10,28 @@ public class Gnomo {
 	private int y;
 	private int ancho;
 	private int alto;
-	private int velocidad;
+	private double velocidad;
 	private double desplazamiento;
 	private boolean estaCayendo;
 	private double movimientoHorizontal;
 	private Random random;
+	//private int nuevoX;
 	
 	
 	
 	
-	public Gnomo(int x, int y, int ancho, int alto, int velocidad, double desplazamiento, boolean estaCayendo,double movH) {
+	public Gnomo(int x, int y, int ancho, int alto, double velocidad, double desplazamiento, boolean estaCayendo,double movH, Random random/*int nuevoX*/) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
-		this.velocidad = 2;
+		this.velocidad = velocidad;
 		this.desplazamiento = desplazamiento;
 		this.estaCayendo= estaCayendo;
 		this.movimientoHorizontal = movH;
 		this.random = new Random();
+		//this.nuevoX= nuevoX;
 
 	}
 	
@@ -86,13 +88,13 @@ public class Gnomo {
 
 
 
-	public int getVelocidad() {
+	public double getVelocidad() {
 		return velocidad;
 	}
 
 
 
-	public void setVelocidad(int velocidad) {
+	public void setVelocidad(double velocidad) {
 		this.velocidad = velocidad;
 	}
 
@@ -109,13 +111,39 @@ public class Gnomo {
 	}
 
 
+	public void moverRandom(Isla [] islas) {
+		int dir = random.nextInt(2); // 0: izquierda, 1: derecha, 2: arriba, 3: abajo
+	    int nuevoX = x;
+	    int nuevoY = y;
 
+	    switch (dir) {
+	        case 0: // Mover a la izquierda
+	            nuevoX -= movimientoHorizontal*velocidad;
+	            break;
+	        case 1: // Mover a la derecha
+	            nuevoX += movimientoHorizontal*velocidad;
+	            break;
+			
+		}
+	    
+	 // Verificar si el nuevo movimiento está dentro de la isla
+	    if (nuevoX >= islas.length - ancho / 2 && nuevoX <= islas.length + islas.length / 2 &&
+	        nuevoY >= islas.length - alto / 2 && nuevoY <= islas.length + islas.length / 2) {
+	        // Actualizar la posición
+	        x = nuevoX;
+	        y = nuevoY;
+	    }
+	    
+		
+	}	
+	
+	
 	public void mover() {
 		this.x-=movimientoHorizontal*velocidad;
 		
 	}
 
-	public void cambiarMovimientoHorizontalIzq() {
+	public void cambiarMovimientoHorizontal() {
 		this.movimientoHorizontal*=-1;
 	}
 	
@@ -154,33 +182,33 @@ public class Gnomo {
 	
 	
 	
-	public boolean estaColisionandoPorDerecha(Personaje pep) {			
-			float bordeDerechoGnomo = this.x + (this.ancho / 2);
-		    float bordeIzquierdPersonaje = pep.getX() - (pep.getAncho() / 2);	
-			
-			if(bordeDerechoGnomo <=bordeIzquierdPersonaje && bordeDerechoGnomo >=bordeIzquierdPersonaje -velocidad) {
-				if(this.y+(this.alto/2) > pep.getY()-(pep.getAlto()/2)  /*&&  this.y-(this.alto/2) < pep.getY()+(pep.getAlto()/2)*/) {
-					this.x=(int) bordeIzquierdPersonaje-(this.ancho/2);
-					return true;
-				}
-			}			
-			return false;
-		
-	}
-	
-	
-	public boolean estaColisionandoPorIzquierda(Personaje pep) {
-			float bordeIzquierdoGnomo = this.x - (this.ancho / 2);
-		    float bordeDerechoPersonaje = pep.getX() + (pep.getAncho() / 2);	
-			
-			if(bordeIzquierdoGnomo >=bordeDerechoPersonaje && bordeIzquierdoGnomo <=bordeDerechoPersonaje +velocidad) {
-				if(this.y-(this.alto/2) < pep.getY()+(pep.getAlto()/2) /* &&  this.y+(this.alto/2) > pep.getY()-(pep.getAlto()/2)*/) {
-					this.x=(int) bordeDerechoPersonaje+(this.ancho/2);
-					return true;
-				}
-			}			
-			return false;
-	}
+//	public boolean estaColisionandoPorDerecha(Personaje pep) {			
+//			float bordeDerechoGnomo = this.x + (this.ancho / 2);
+//		    float bordeIzquierdPersonaje = pep.getX() - (pep.getAncho() / 2);	
+//			
+//			if(bordeDerechoGnomo <=bordeIzquierdPersonaje && bordeDerechoGnomo >=bordeIzquierdPersonaje -velocidad) {
+//				if(this.y+(this.alto/2) > pep.getY()-(pep.getAlto()/2)  /*&&  this.y-(this.alto/2) < pep.getY()+(pep.getAlto()/2)*/) {
+//					this.x=(int) bordeIzquierdPersonaje-(this.ancho/2);
+//					return true;
+//				}
+//			}			
+//			return false;
+//		
+//	}
+//	
+//	
+//	public boolean estaColisionandoPorIzquierda(Personaje pep) {
+//			float bordeIzquierdoGnomo = this.x - (this.ancho / 2);
+//		    float bordeDerechoPersonaje = pep.getX() + (pep.getAncho() / 2);	
+//			
+//			if(bordeIzquierdoGnomo >=bordeDerechoPersonaje && bordeIzquierdoGnomo <=bordeDerechoPersonaje +velocidad) {
+//				if(this.y-(this.alto/2) < pep.getY()+(pep.getAlto()/2) /* &&  this.y+(this.alto/2) > pep.getY()-(pep.getAlto()/2)*/) {
+//					this.x=(int) bordeDerechoPersonaje+(this.ancho/2);
+//					return true;
+//				}
+//			}			
+//			return false;
+//	}
 	
 	
 }

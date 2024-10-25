@@ -149,43 +149,63 @@ public class Tortuga {
 	}
 	
 	
-	
-	public boolean estaColisionandoPorDerecha(Isla[] islas) {
+	public boolean estaColisionandoConBordes(Isla[] islas) {
 		for(Isla isla : islas) {
-			if(isla==null) {
+			if(isla==null ) {
 				continue;
 			}					
-			double bordeDerechoTortuga = this.x + (this.ancho / 2);
-		    float bordeDerechoIsla = isla.getX() + (isla.getAncho() / 2 );	
-			
-			if(bordeDerechoTortuga <=bordeDerechoIsla && bordeDerechoTortuga >=bordeDerechoIsla -velocidad) {
-				if(this.x - (this.ancho / 2) <  isla.getY() - (isla.getAlto() / 2 )  /* && this.y-(this.alto/2) < isla.getY()-(isla.getAlto()/2)*/) {
-					this.x=(int) bordeDerechoIsla-(this.ancho/2);
-					return true;
-				}
-			}			
+	
+			if( this.x + (this.ancho / 2) < isla.getX() - (isla.getAncho()/2)/*||  this.x - (this.ancho / 2)<  isla.getX() - (isla.getAncho()/2)*/) {
+				return true;
+			}
 		}
 		return false;
 		
 	}
-
-	public boolean estaColisionandoPorIzquierda(Isla[] islas) {
-		for(Isla isla : islas) {
-			if(isla==null) {
-				continue;
-			}					
-			double bordeIquierdoTortuga = this.x - (this.ancho / 2);
-		    float bordeizquierdoIsla = isla.getX() - (isla.getAncho() / 2);	
-			
-			if(bordeIquierdoTortuga >=bordeizquierdoIsla && bordeIquierdoTortuga <=bordeizquierdoIsla +velocidad) {
-				if(this.x+(this.ancho/2) > isla.getY()+(isla.getAlto()/2) /* &&  this.y-(this.alto) < isla.getY()+(isla.getAlto()*/) {
-					this.x=(int) bordeizquierdoIsla+(this.ancho/2);
-					return true;
-				}
-			}			
-		}
-		return false;
-	}
+	
+//	public boolean colisionDinoBorde(Entorno e) {
+//		if(this.x+this.ancho/2 >= e.ancho()  || this.x-this.ancho/2<=0) {
+//			return true;
+//		}
+//		return false;
+//	}
+	
+//	public boolean estaColisionandoPorDerecha(Isla[] islas) {
+//		for(Isla isla : islas) {
+//			if(isla==null) {
+//				continue;
+//			}					
+//			double bordeDerechoTortuga = this.x + (this.ancho / 2);
+//		    float bordeDerechoIsla = isla.getX() + (isla.getAncho()/2);	
+//			
+//			if(bordeDerechoTortuga <=bordeDerechoIsla && bordeDerechoTortuga >=bordeDerechoIsla -velocidad) {
+//				if(this.x - (this.ancho / 2) <  isla.getY() - (isla.getAlto() / 2 )  /* && this.y-(this.alto/2) < isla.getY()-(isla.getAlto()/2)*/) {
+//					this.x=(int) bordeDerechoIsla-(this.ancho/2);
+//					return true;
+//				}
+//			}			
+//		}
+//		return false;
+//		
+//	}
+//
+//	public boolean estaColisionandoPorIzquierda(Isla[] islas) {
+//		for(Isla isla : islas) {
+//			if(isla==null) {
+//				continue;
+//			}					
+//			double bordeIquierdoTortuga = this.x - (this.ancho / 2);
+//		    float bordeizquierdoIsla = isla.getX() - (isla.getAncho()/2);	
+//			
+//			if(bordeIquierdoTortuga >=bordeizquierdoIsla && bordeIquierdoTortuga <=bordeizquierdoIsla +velocidad) {
+//				if(this.x+(this.ancho/2) > isla.getY()+(isla.getAlto()/2) /* &&  this.y-(this.alto) < isla.getY()+(isla.getAlto()*/) {
+//					this.x=(int) bordeizquierdoIsla+(this.ancho/2);
+//					return true;
+//				}
+//			}			
+//		}
+//		return false;
+//	}
 	
 	
 	

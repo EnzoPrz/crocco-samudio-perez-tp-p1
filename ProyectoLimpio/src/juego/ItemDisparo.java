@@ -17,7 +17,7 @@ public class ItemDisparo {
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
-		img= Herramientas.cargarImagen("boladefuegoi.png");
+		img= Herramientas.cargarImagen("boladefuegoi.jpg");
 	}
 
 	public double getX() {
