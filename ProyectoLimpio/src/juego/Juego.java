@@ -2,7 +2,7 @@ package juego;
 
 
 import java.awt.Color;
-
+import java.awt.Image;
 
 import entorno.Entorno;
 import entorno.InterfaceJuego;
@@ -12,11 +12,17 @@ public class Juego extends InterfaceJuego{
 	private Entorno entorno;
 	private Personaje pep;
 	private Isla[] islas;
-	private Tortuga tortugas [] = new Tortuga [6];
-	private Gnomo gnomos;
+	private Tortuga tortugas [] = new Tortuga [58];
+	private Gnomo gnomos[] = new Gnomo [40];
+	private int tiempo;
 	private DisparoPersonaje disparoPersonaje;
 	private ItemDisparo itemdisparo;
-	private int contadorDisparos= 3;
+	private int contadorDisparos= 1000;
+	private int puntaje=0;
+	private int enemigos_eliminados=0;
+	private BombaTortuga bombitas [] = new BombaTortuga [6];
+	private Image fondo;
+	private int salvados =0;
 
 	
 	// Variables y métodos propios de cada grupo
@@ -33,9 +39,11 @@ public class Juego extends InterfaceJuego{
 		islas=crearIslas(entorno);
 		//tortugas=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 100, 27, 50, 0, true, 0, 0.5, 'd');
 		//tortuga1=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 100, 27, 50, 0, true, 0, 1);
-		RellenarJuegoConDinos(tortugas);
+		RellenarJuegoConTortugas(tortugas);
+		RellenarJuegoConBombas(bombitas);
+		RellenarJuegoConGnomos(gnomos);
 		
-		gnomos= new Gnomo(entorno.ancho()/2,entorno.alto()/2-270,20, 60, 0, 0, false, 0.5);
+		//gnomos= new Gnomo(entorno.ancho()/2,entorno.alto()/2-270,20, 60, 0, 0, false, 0.5);
 		//tortugas=crearTortugas(entorno);
 		//RellenarJuegoConDinos(tortugas);
 
@@ -59,7 +67,19 @@ public class Juego extends InterfaceJuego{
 		// Procesamiento de un instante de tiempo
 		// ...
 		
+//		pantalla perder
+		if (pep==null) {
+			Perder();
+			return;
+		}
+			
+		
 		pep.dibujar(entorno);
+		
+		
+		
+		
+		
 		for(Isla isla: islas) {
 			if(isla!=null) {
 				isla.dibujar(entorno);				
@@ -75,7 +95,7 @@ public class Juego extends InterfaceJuego{
 //		if(tortugas != null) {
 //			tortugas.dibujar(entorno);
 //		}
-		gnomos.dibujar(entorno);
+		//gnomos.dibujar(entorno);
 		
 		
 		
@@ -126,7 +146,7 @@ public class Juego extends InterfaceJuego{
 		///////disparo personaje pep ---> disparo
 
 
-		if(entorno.estaPresionado(entorno.BOTON_IZQUIERDO) && this.disparoPersonaje==null && this.contadorDisparos>0 && this.contadorDisparos<=3) {
+		if(entorno.estaPresionado(entorno.BOTON_IZQUIERDO) && this.disparoPersonaje==null && this.contadorDisparos>0 && this.contadorDisparos<=1000) {
 			this.disparoPersonaje=new DisparoPersonaje (this.pep.getX(), this.pep.getY(), 20, 20,1,2, this.pep.getDireccion());
 		}
 		
@@ -140,6 +160,36 @@ public class Juego extends InterfaceJuego{
 			}
 		}
 		
+		//TORTUGAS ---> bombas
+				int t = 0;
+				for (t = 0; t < bombitas.length; t++) {
+					if(this.bombitas[t]!=null) {
+						this.bombitas[t].dibujarse(entorno);
+						this.bombitas[t].moverBombaTortuga();
+					
+						if (this.bombitas[t].colisionBombaTortugaBorde(entorno)) {
+							this.bombitas[t]=null;
+						}
+					}
+					
+					if(this.bombitas[5]==null) {
+						RellenarJuegoConBombas(this.bombitas);
+					}
+					
+				//COLISION BOMBITAS-DISPARO
+					if(this.disparoPersonaje!=null && this.bombitas[t]!=null && colisionar(this.bombitas[t].getX(), this.bombitas[t].getY(), this.disparoPersonaje.getX(),this.disparoPersonaje.getY(),20)) {
+						this.disparoPersonaje=null;
+						this.contadorDisparos--;
+						this.bombitas[t]=null;
+					}
+					
+				//COLISION BOMBITAS-PRINCESA
+					if(this.pep!=null && this.bombitas[t]!=null && colisionar(this.bombitas[t].getX(), this.bombitas[t].getY(), this.pep.getX(), this.pep.getY(),20)) {
+						this.pep=null;
+					}
+				}
+				
+		
 		//item - disparo
 		if (contadorDisparos==0) {
 			this.itemdisparo = new ItemDisparo (entorno.ancho()-35, 350, 18, 18);
@@ -148,7 +198,7 @@ public class Juego extends InterfaceJuego{
 				
 		if (this.itemdisparo!=null && colisionar(this.pep.getX(), this.pep.getY(), this.itemdisparo.getX(), this.itemdisparo.getY(), 10)) {
 			this.itemdisparo=null;
-			contadorDisparos=3;
+			contadorDisparos=1000;
 		}
 		
 		
@@ -158,82 +208,117 @@ public class Juego extends InterfaceJuego{
 		
 		// las tortugas caen
 	
-//		if(tortugas.getEstaCayendo()&& !tortugas.estaColisionandoPorAbajo(islas)) {
-//				tortugas.moverHaciaAbajo(entorno);
-//		}	
-//		
-//		// SE MUEVEN
-//		if (tortugas.estaColisionandoPorAbajo(islas)) {
-//			tortugas.mover();
-//		}
-//		
-//		if( tortugas.estaColisionandoPorIzquierda(islas)||tortugas.estaColisionandoPorDerecha(islas)) {
-//			tortugas.cambiarMovimientoHorizontal();
-//		}
-
-		
-		
 		int r;
 		for (r=0;r<=this.tortugas.length-1;r++) {
-			if(this.tortugas[r] != null) {
-				this.tortugas[r].dibujar(entorno);
+			if(tortugas[r] != null) {
+				tortugas[r].dibujar(entorno);
 			
-			if (this.tortugas[r].getEstaCayendo()==false) {
-				this.tortugas[r].mover();
-			}
+//			if (!tortugas[r].estaColisionandoPorAbajo(islas)) {
+//				tortugas[r].moverHaciaAbajo(entorno);
+//				tortugas[r].setEstaCayendo(true);
+//			}
 			
-			if(this.tortugas[r].estaColisionandoPorDerecha(islas) || this.tortugas[r].estaColisionandoPorIzquierda(islas)) {
-				this.tortugas[r].cambiarMovimientoHorizontal();
-			}
-						
-			
-			
-			//COLISION DINOSAURIO-BLOQUEABAJO /si no hay bloque --> CAE	
-			
-			if(this.tortugas[r]!=null && !this.tortugas[r].estaColisionandoPorAbajo(islas)) {
-				this.tortugas[r].moverHaciaAbajo(entorno);
-				this.tortugas[r].setEstaCayendo(true);
-			} else {
-				if(this.tortugas[r]!=null) {
-				this.tortugas[r].setEstaCayendo(false);
+//			//se mueven
+//			if(tortugas[r].estaColisionandoPorAbajo(islas)) {
+//				tortugas[r].mover();
+//			}
+				
+				if( !tortugas[r].estaColisionandoPorAbajo(islas)) {
+					tortugas[r].moverHaciaAbajo(entorno);
+					tortugas[r].setEstaCayendo(true);
+				}
+				
+				// SE MUEVEN
+				if (tortugas[r].estaColisionandoPorAbajo(islas)) {
+					tortugas[r].mover();
+				}
+					
+				for (Isla isla : islas) {
+	                if (this.tortugas[r].estaColisionandoPorAbajo(new Isla[]{isla})) {
+	                    this.tortugas[r].setIslaActual(isla);
+	                    break;
+	                }
+				}
+				
+				//COLISION TORTUGAS-PEP
+				if(this.pep!=null && colisionar(this.tortugas[r].getX(), this.tortugas[r].getY(), this.pep.getX(), this.pep.getY(), 30)) {
+					this.pep=null;
+				}
+				
+				//COLISION TORTUGAS-DISPARO	PEP
+				if (this.disparoPersonaje!=null && colisionar(this.disparoPersonaje.getX(),this.disparoPersonaje.getY(), this.tortugas[r].getX(), this.tortugas[r].getY(),20)) {
+					this.tortugas[r]=null;
+					this.disparoPersonaje=null;
+					this.contadorDisparos--;
+					this.puntaje +=2;
+					this.enemigos_eliminados +=1;
 				}
 			}
-			}
-			}
+		}
+		
+		
+		
+		
+		
 		
 ////////////////////////////////  GNOMOS    //////////////////////////////////////////////////////		
 		
 		
 	    // Verifica si el gnomo colisiona con las islas
-		if(!gnomos.getEstaCayendo()) {
-		    if (!gnomos.estaColisionandoPorAbajo(islas)) {
-		        gnomos.moverHaciaAbajo(entorno);
 		
-		    }
-	    
+//		if(!gnomos.getEstaCayendo()) {
+//		    if (!gnomos.estaColisionandoPorAbajo(islas)) {
+//		        gnomos.moverHaciaAbajo(entorno);
+//		
+//		    }
+//	    
+//		}
+//	    if (gnomos.getEstaCayendo() &&  !gnomos.estaColisionandoPorAbajo(islas)) {
+//	    	gnomos.moverHaciaAbajo(entorno);
+//	    	gnomos.setEstaCayendo(false);
+//	    }
+//	    
+//		
+//	    if (!gnomos.getEstaCayendo()&& gnomos.estaColisionandoPorAbajo(islas)) {
+//	    	gnomos.mover();
+//		}
+//		
+//		
+//		if(!gnomos.estaColisionandoPorDerecha(pep)) {
+//			gnomos.mover();
+//		}
+		
+		
+		int w;
+		for (w=0;w<=gnomos.length-1;w++) {
+			if(gnomos[w] != null) {
+				gnomos[w].dibujar(entorno);
+			
+				if( !gnomos[w].estaColisionandoPorAbajo(islas)) {
+					gnomos[w].moverHaciaAbajo(entorno);
+					
+				}
+				
+				
+				// SE MUEVEN
+				if (gnomos[w].estaColisionandoPorAbajo(islas)) {
+					gnomos[w].mover(islas);
+				}
+				
+				//COLISION gnompos con pep
+				if(this.pep!=null && colisionar(this.gnomos[w].getX(), this.gnomos[w].getY(), this.pep.getX(), this.pep.getY(), 30)) {
+					this.gnomos[w]=null;
+					salvados++;
+				}
+			
+			}
 		}
-	    if (gnomos.getEstaCayendo() &&  !gnomos.estaColisionandoPorAbajo(islas)) {
-	    	gnomos.moverHaciaAbajo(entorno);
-	    	gnomos.setEstaCayendo(false);
-	    }
-	    
-		
-	    if (!gnomos.getEstaCayendo()&& gnomos.estaColisionandoPorAbajo(islas)) {
-	    	gnomos.mover();
-		}
-		
-		
-		if(!gnomos.estaColisionandoPorDerecha(pep)) {
-			gnomos.mover();
-		}
-		
-	
+
+		entorno.escribirTexto("gnomos salvados: " + salvados, 3, 20);
 		
 		
 		
 }
-	
-	
 	
 	
 	public static Isla[] crearIslas(Entorno e) {
@@ -257,43 +342,90 @@ public class Juego extends InterfaceJuego{
 	
 	
 	
-	public void RellenarJuegoConDinos (Tortuga [] t) {
-		double XparaDinoF1 = 45;
-		double YparaDinoF1 = entorno.alto()/2;
-		double XparaDinoF2 = 95;
-		double YparaDinoF2 = entorno.alto()/2;
-		double XparaDinoF3 = 175;
-		double YparaDinoF3 = entorno.alto()/2;
-//		double XparaDinoF4 = 255;
-//		double YparaDinoF4 = entorno.alto()/2;
+	public void RellenarJuegoConTortugas (Tortuga [] t) {
+		double XparaTortuF1 = 175;
+		double YparaTortuF1 = entorno.alto()/2;
+		double XparaTortuF2 = 95;
+		double YparaTortuF2 = entorno.alto()/2;
+		double XparaTortuF3 = 45;
+		double YparaTortuF3 = entorno.alto()/2;
+		double XparaTortuF4 = 295;
+		double YparaTortuF4 = entorno.alto()/2;
 		
 		for (int i=0; i < t.length; i++) {
 			if (i==0 || i==1) {
-				t[i] = new Tortuga (XparaDinoF1, YparaDinoF1-170, 27, 50, 0.5, 2, 'd', false, 0.5 );
-				XparaDinoF1=entorno.ancho()-XparaDinoF1;
+				t[i] = new Tortuga (XparaTortuF1, YparaTortuF1-170, 27, 50, 0.5, 2, 'd', false, 0.5 );
+				XparaTortuF1=entorno.ancho()-XparaTortuF1;
 			}
 			
 			if (i==2 || i==3) {
-				t[i] = new Tortuga (XparaDinoF2, YparaDinoF2-170, 27, 50, 0.5, 1.5, 'd', false, 0.5 );
-				XparaDinoF2=entorno.ancho()-XparaDinoF2;
+				t[i] = new Tortuga (XparaTortuF2, YparaTortuF2-170, 27, 50, 0.5, 1.5, 'd', false, 0.5 );
+				XparaTortuF2=entorno.ancho()-XparaTortuF2;
 			}
 			if (i==4 || i==5) {
-				t[i] = new Tortuga (XparaDinoF3, YparaDinoF3-170, 27, 50, 0.5, 1, 'd', false, 0.5 );
-				XparaDinoF3=entorno.ancho()-XparaDinoF3;
+				t[i] = new Tortuga (XparaTortuF3, YparaTortuF3-170, 27, 50, 0.5, 1, 'd', false, 0.5 );
+				XparaTortuF3=entorno.ancho()-XparaTortuF3;
 			}
-//			if (i==6 || i==7) {
-//				t[i] = new Tortuga (XparaDinoF4, YparaDinoF4-190, 27, 50, 0.5, 1, 'd', false, 0.5 );
-//				XparaDinoF4=entorno.ancho()-XparaDinoF4;
-//			}
+			if (i==6 || i==7) {
+				t[i] = new Tortuga (XparaTortuF4, YparaTortuF4-50, 27, 50, 0.5, 1, 'd', false, 0.5 );
+				XparaTortuF4=entorno.ancho()-XparaTortuF4;
+			}
 			
+		}
+	}
+	
+	public void RellenarJuegoConGnomos(Gnomo [] gno) {
+		double XparaGnomoF1 = entorno.ancho()/2;
+		double YparaGnomoF1 = entorno.alto()/2-270;
+		double XparaGnomoF2 = entorno.ancho()/2;
+		double YparaGnomoF2 = entorno.alto()/2-270;
+		double XparaGnomoF3 = entorno.ancho()/2;
+		double YparaGnomoF3 = entorno.alto()/2-270;
+	
+		
+		
+		for (int g=0; g<gno.length; g++) {
+			if (g==0 || g==1) {
+				gno[g]= new Gnomo(XparaGnomoF1,YparaGnomoF1,20, 60, 1, 0, true, 1, null);
+				XparaGnomoF1=((entorno.ancho()/2)+390)-XparaGnomoF1;
+			}
+			
+			if (g==2 || g==3) {
+				gno[g]= new Gnomo(XparaGnomoF2,YparaGnomoF2,20, 60, 1, 0, true, 1, null);
+				XparaGnomoF2=((entorno.ancho()/2)+400)-XparaGnomoF2;
+			}
+			
+			if (g==4 || g==5) {
+				gno[g]= new Gnomo(XparaGnomoF3,YparaGnomoF3,20, 60, 1, 0, true, 1, null);
+				XparaGnomoF3=((entorno.ancho()/2)+420)-XparaGnomoF3;
+			}
+			
+		}
+		
+	}
+	
+	public void RellenarJuegoConBombas(BombaTortuga [] bombatortu) {
+		for (int g=0; g<bombatortu.length; g++) {
+			if(this.tortugas[g]!=null && bombatortu[g]==null) {
+				bombatortu[g]= new BombaTortuga (this.tortugas[g].getX(), this.tortugas[g].getY()+12, 20,20, this.tortugas[g].getDireccion(),1,1);
+			}
 		}
 	}
 	
 	
 	
 	
+	public void Perder() {
+		entorno.removeAll();
+		entorno.dibujarRectangulo(entorno.ancho()/2, entorno.alto()/2, 1000, 1000, 0, Color.black);
+		entorno.cambiarFont("Arial", 50, Color.white);
+		entorno.escribirTexto("Perdiste! :(", entorno.ancho()/2, entorno.alto()/2);
+	}
 	
-	
+	public void ReiniciarPep() {
+		this.pep.setX(20);
+		this.pep.setY(40);
+	}
 	
 	
 	
@@ -301,12 +433,10 @@ public class Juego extends InterfaceJuego{
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)) < dist;
 	}
 	
-	
 
 
 	@SuppressWarnings("unused")
-	public static void main(String[] args)
-	{
+	public static void main(String[] args){
 		Juego juego = new Juego();
 	}
 	

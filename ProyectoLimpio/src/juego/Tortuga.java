@@ -16,6 +16,7 @@ public class Tortuga {
 	private boolean estaCayendo;
 	private double movimientoHorizontal;
 	private char direccion;
+	private Isla islaActual;
 
 	;
 	
@@ -31,6 +32,7 @@ public class Tortuga {
 		this.direccion = direccion;
 		this.estaCayendo= estaCayendo;
 		this.movimientoHorizontal = movH;
+		this.islaActual = islaActual;
 		
 		
 		
@@ -108,8 +110,23 @@ public class Tortuga {
 	
 	
 	public void mover() {
-		this.x+=movimientoHorizontal*velocidad;
 		
+		if (islaActual != null) {
+	        double bordeIzquierdoIsla = islaActual.getX() - (islaActual.getAncho() / 2);
+	        double bordeDerechoIsla = islaActual.getX() + (islaActual.getAncho() / 2);
+
+	        this.x += movimientoHorizontal * velocidad;
+
+	        
+	        if (this.x - (this.ancho/2) <= bordeIzquierdoIsla) {
+	            this.x = bordeIzquierdoIsla + (this.ancho/2);
+	            cambiarMovimientoHorizontal();
+	        } else if (this.x + (this.ancho/2) >= bordeDerechoIsla) {
+	        
+	            this.x = bordeDerechoIsla - (this.ancho/2);
+	            cambiarMovimientoHorizontal();
+	        }
+	    }
 	}
 	
 	
@@ -127,6 +144,14 @@ public class Tortuga {
 		this.direccion = direccion;
 	}
 
+
+	public Isla getIslaActual() {
+	    return islaActual;
+	}
+
+	public void setIslaActual(Isla islaActual) {
+	    this.islaActual = islaActual;
+	}
 	
 	
 	

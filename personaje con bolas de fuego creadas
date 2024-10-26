@@ -1,1 +1,19 @@
-pep con sus bolas de fuego hechas 
+@ Reemplazar en el texto todas las apariciones de la letra a por @
+
+Subir el .asm completo. La entrega es individual tienen que poner un print de la compilacion y linkeo del programa en una carpeta propia.
+
+.data
+texto: .ascii "Hola mundo"
+largo:  . - texto
+
+.text
+.global main
+
+main:
+
+@ recorremos la cadena hasta que largo sea <= que la cadena
+@ si encontramos una a la reemplazamos por @
+
+salir:
+mov r7, #1
+swi #0

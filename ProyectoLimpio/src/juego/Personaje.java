@@ -215,6 +215,37 @@ public class Personaje {
 
 
 	
+	
+	public void correjirPosicion(Isla [] islas) {
+		Punto supIzq =new Punto (this.x-(this.ancho/2),this.y-(this.alto/2));
+		Punto supDer =new Punto (this.x+(this.ancho/2),this.y-(this.alto/2));
+		Punto infIzq =new Punto (this.x-(this.ancho/2),this.y+(this.alto/2));
+		Punto infDer =new Punto (this.x+(this.ancho/2),this.y+(this.alto/2));
+		
+		for(Isla isla : islas) {
+			if(isla==null) {
+				continue;
+			}
+			if(estaDentro(supIzq,isla) || estaDentro(supDer,isla)) {
+				this.y = isla.getY()+ (isla.getAlto()/2)+ (this.alto/2);
+			}
+			else if(estaDentro(infIzq,isla) || estaDentro(infDer,isla)){
+				this.y = isla.getY()-(isla.getAlto()/2)-(this.alto/2);
+				
+			}
+		}
+	}
+	
+	public boolean estaDentro(Punto p , Isla i) {
+		if(p.getX() > i.getX()-(i.getAncho()/2)
+				&& p.getX() < i.getX()+(i.getAncho()/2)
+					&& p.getY() > i.getY()-(i.getAlto()/2)
+						&& p.getY() < i.getY()+(i.getAlto()/2)) {
+			return true;
+		}
+		return false;
+	}
+	
 	//////////////////////////////////////
 
 

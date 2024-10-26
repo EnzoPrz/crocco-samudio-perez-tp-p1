@@ -41,7 +41,7 @@ public DisparoPersonaje(double x, double y, int ancho, int alto, int desplazamie
 
 	public void dibujarse(Entorno e) {
 		int indiceImagen = (this.direccion == 'd') ? 0 : 1; 
-		e.dibujarImagen(img[indiceImagen], this.x, this.y, 0, 0.075);
+		e.dibujarImagen(img[indiceImagen], this.x, this.y, 0, 0.055);
 		
 	}
 	
