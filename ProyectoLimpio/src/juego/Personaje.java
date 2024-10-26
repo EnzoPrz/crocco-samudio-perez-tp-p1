@@ -16,14 +16,14 @@ public class Personaje {
 	
 	
 	
-	public Personaje(int x, int y, int ancho, int alto,int velocidad, boolean estaSaltando, char i) {
+	public Personaje(int x, int y, int ancho, int alto,int velocidad, boolean estaSaltando, char direccion) {
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
 		this.velocidad=3;
 		this.estaSaltando = estaSaltando;
-		this.direccion= i;
+		this.direccion= direccion;
 	
 		
 		
@@ -75,10 +75,12 @@ public class Personaje {
 	
 	public void moverDerecha(Entorno e) {
 			this.x+=velocidad;
+			this.direccion='d';
 	}
 	
 	public void moverIzquierda(Entorno e) {
 			this.x-=velocidad;	
+			this.direccion='i';
 	}
 	
 	public void moverHaciaAbajo(Entorno e) {
@@ -92,6 +94,14 @@ public class Personaje {
 	
 	public boolean getEstaSaltando() {
 		return estaSaltando;
+	}
+	
+	public void setDireccion(char direccion) {
+		this.direccion = direccion;
+	}
+
+	public char getDireccion() {
+		return direccion;
 	}
 
 	
@@ -204,14 +214,38 @@ public class Personaje {
 	}
 
 
-	public char getDireccion() {
-		return direccion;
-	}
-
 	
 	//////////////////////////////////////
 
-
+	public void correjirPosicion(Isla [] islas) {
+		Punto supIzq =new Punto (this.x-(this.ancho/2),this.y-(this.alto/2));
+		Punto supDer =new Punto (this.x+(this.ancho/2),this.y-(this.alto/2));
+		Punto infIzq =new Punto (this.x-(this.ancho/2),this.y+(this.alto/2));
+		Punto infDer =new Punto (this.x+(this.ancho/2),this.y+(this.alto/2));
+		
+		for(Isla isla : islas) {
+			if(isla==null) {
+				continue;
+			}
+			if(estaDentro(supIzq,isla) || estaDentro(supDer,isla)) {
+				this.y = isla.getY()+ (isla.getAlto()/2)+ (this.alto/2);
+			}
+			else if(estaDentro(infIzq,isla) || estaDentro(infDer,isla)){
+				this.y = isla.getY()-(isla.getAlto()/2)-(this.alto/2);
+				
+			}
+		}
+	}
+	
+	public boolean estaDentro(Punto p , Isla i) {
+		if(p.getX() > i.getX()-(i.getAncho()/2)
+				&& p.getX() < i.getX()+(i.getAncho()/2)
+					&& p.getY() > i.getY()-(i.getAlto()/2)
+						&& p.getY() < i.getY()+(i.getAlto()/2)) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 	
