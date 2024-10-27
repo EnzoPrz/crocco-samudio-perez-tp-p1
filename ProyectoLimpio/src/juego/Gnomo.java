@@ -201,7 +201,7 @@ public class Gnomo {
 
 	
 	
-	
+
 	
 	
 //	public boolean estaColisionandoPorDerecha(Personaje pep) {	
