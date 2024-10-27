@@ -18,7 +18,6 @@ public class Tortuga {
 	private char direccion;
 	private Isla islaActual;
 
-
 	;
 	
 	
@@ -33,7 +32,7 @@ public class Tortuga {
 		this.direccion = direccion;
 		this.estaCayendo= estaCayendo;
 		this.movimientoHorizontal = movH;
-		this.islaActual= islaActual;
+		this.islaActual = islaActual;
 		
 		
 		
@@ -110,6 +109,32 @@ public class Tortuga {
 	}
 	
 	
+	public void mover() {
+		
+		if (islaActual != null) {
+	        double bordeIzquierdoIsla = islaActual.getX() - (islaActual.getAncho() / 2);
+	        double bordeDerechoIsla = islaActual.getX() + (islaActual.getAncho() / 2);
+
+	        this.x += movimientoHorizontal * velocidad;
+
+	        
+	        if (this.x - (this.ancho/2) <= bordeIzquierdoIsla) {
+	            this.x = bordeIzquierdoIsla + (this.ancho/2);
+	            cambiarMovimientoHorizontal();
+	        } else if (this.x + (this.ancho/2) >= bordeDerechoIsla) {
+	        
+	            this.x = bordeDerechoIsla - (this.ancho/2);
+	            cambiarMovimientoHorizontal();
+	        }
+	    }
+	}
+	
+	
+	public void cambiarMovimientoHorizontal() {
+		this.movimientoHorizontal*=-1;
+	}
+	
+
 	public char getDireccion() {
 		return direccion;
 	}
@@ -118,49 +143,15 @@ public class Tortuga {
 	public void setDireccion(char direccion) {
 		this.direccion = direccion;
 	}
-	
-	
-//	public void mover() {
-//		this.x+=movimientoHorizontal*velocidad;
-//		
-//	}
-	
-	
-	public void cambiarMovimientoHorizontal() {
-		this.movimientoHorizontal*=-1;
-	}
-	
+
+
 	public Isla getIslaActual() {
 	    return islaActual;
 	}
 
 	public void setIslaActual(Isla islaActual) {
-	    this.islaActual= islaActual;
+	    this.islaActual = islaActual;
 	}
-	
-	
-	public void mover() {
-		if(islaActual != null ) {
-			
-			double BordeIzquierdoIsla = islaActual.getX() - islaActual.getAncho()/2;
-			double BrodeDerechoIsla = islaActual.getX() + islaActual.getAncho()/2;
-			
-			
-			this.x+=movimientoHorizontal*velocidad;
-			
-			if(this.x - (this.ancho/2) <= BordeIzquierdoIsla) {
-				this.x=BordeIzquierdoIsla + (this.ancho/2);
-				cambiarMovimientoHorizontal();
-			}else if(this.x + (this.ancho/2) >= BrodeDerechoIsla) {
-				
-				this.x= BrodeDerechoIsla- (this.ancho/2);
-				cambiarMovimientoHorizontal();
-			}
-			
-			
-		}
-	}
-	
 	
 	
 	
@@ -183,9 +174,43 @@ public class Tortuga {
 	}
 	
 	
-
 	
+	public boolean estaColisionandoPorDerecha(Isla[] islas) {
+		for(Isla isla : islas) {
+			if(isla==null) {
+				continue;
+			}					
+			double bordeDerechoTortuga = this.x + (this.ancho / 2);
+		    float bordeDerechoIsla = isla.getX() + (isla.getAncho() / 2 );	
+			
+			if(bordeDerechoTortuga <=bordeDerechoIsla && bordeDerechoTortuga >=bordeDerechoIsla -velocidad) {
+				if(this.x - (this.ancho / 2) <  isla.getY() - (isla.getAlto() / 2 )  /* && this.y-(this.alto/2) < isla.getY()-(isla.getAlto()/2)*/) {
+					this.x=(int) bordeDerechoIsla-(this.ancho/2);
+					return true;
+				}
+			}			
+		}
+		return false;
+		
+	}
 
+	public boolean estaColisionandoPorIzquierda(Isla[] islas) {
+		for(Isla isla : islas) {
+			if(isla==null) {
+				continue;
+			}					
+			double bordeIquierdoTortuga = this.x - (this.ancho / 2);
+		    float bordeizquierdoIsla = isla.getX() - (isla.getAncho() / 2);	
+			
+			if(bordeIquierdoTortuga >=bordeizquierdoIsla && bordeIquierdoTortuga <=bordeizquierdoIsla +velocidad) {
+				if(this.x+(this.ancho/2) > isla.getY()+(isla.getAlto()/2) /* &&  this.y-(this.alto) < isla.getY()+(isla.getAlto()*/) {
+					this.x=(int) bordeizquierdoIsla+(this.ancho/2);
+					return true;
+				}
+			}			
+		}
+		return false;
+	}
 	
 	
 }	

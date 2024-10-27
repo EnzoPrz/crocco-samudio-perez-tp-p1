@@ -215,8 +215,7 @@ public class Personaje {
 
 
 	
-	//////////////////////////////////////
-
+	
 	public void correjirPosicion(Isla [] islas) {
 		Punto supIzq =new Punto (this.x-(this.ancho/2),this.y-(this.alto/2));
 		Punto supDer =new Punto (this.x+(this.ancho/2),this.y-(this.alto/2));
@@ -246,6 +245,10 @@ public class Personaje {
 		}
 		return false;
 	}
+	
+	//////////////////////////////////////
+
+
 	
 	
 	
