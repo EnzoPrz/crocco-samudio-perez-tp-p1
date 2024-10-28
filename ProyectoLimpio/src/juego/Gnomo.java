@@ -1,9 +1,11 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.util.Random;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Gnomo {
 	private double x;
@@ -22,6 +24,7 @@ public class Gnomo {
 
 	private boolean puedeCambiarDireccion; // Controla el cambio de dirección
 	private int framesSinCambiar; // Contador de frames sin cambiar dirección
+	private Image img;
 	
 	
 	public Gnomo(double x, double y, int ancho, int alto, double velocidad, double desplazamiento, boolean estaCayendo,double movH, Random random) {
@@ -39,11 +42,14 @@ public class Gnomo {
 		this.direccionMovimiento = (Math.random() < 0.5) ? IZQUIERDA : DERECHA;
 		this.puedeCambiarDireccion = true; // Permitir el cambio al principio
 		this.framesSinCambiar = 0; // Contador inicial
+		img= Herramientas.cargarImagen("gnomos.png");
 
 	}
 	
-	public void dibujar(Entorno entorno) {
-		entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.yellow);
+	public void dibujar(Entorno e) {
+		//entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.yellow);
+		 e.dibujarImagen(img, this.x, this.y, 0, 0.10);
+		
 	}
 	
 	
@@ -200,8 +206,21 @@ public class Gnomo {
 	}
 
 	
+	public boolean estaColisionandoPorAbajo(Entorno e) {
+		if(this.y+(this.alto/2) >= e.alto()) {
+			return true;
+		}
+		return false;
+	}
 	
-
+//	public boolean cayoAlVacio(double entorno e) {
+//	    double bordeInferiorGnomo = this.y + (this.alto / 2);
+//	    if (bordeInferiorGnomo >= e) {
+//	        return true;
+//	    } else {
+//	        return false;
+//	    }
+//	}
 	
 	
 //	public boolean estaColisionandoPorDerecha(Personaje pep) {	

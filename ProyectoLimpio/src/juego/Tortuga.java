@@ -1,9 +1,10 @@
 package juego;
 
 import java.awt.Color;
-
+import java.awt.Image;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 
 
 public class Tortuga {
@@ -17,6 +18,7 @@ public class Tortuga {
 	private double movimientoHorizontal;
 	private char direccion;
 	private Isla islaActual;
+	Image img[];
 
 	;
 	
@@ -33,6 +35,10 @@ public class Tortuga {
 		this.estaCayendo= estaCayendo;
 		this.movimientoHorizontal = movH;
 		this.islaActual = islaActual;
+		this.img = new Image[2];
+		
+		this.img[0] = Herramientas.cargarImagen("tortugamalad.png"); // imagen derecha
+		this.img[1] = Herramientas.cargarImagen("tortugamalai.png"); // imagen izquierda
 		
 		
 		
@@ -41,8 +47,11 @@ public class Tortuga {
 		
 	}
 	
-	public void dibujar(Entorno entorno) {
-		entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.green);
+	public void dibujar(Entorno e) {
+		//entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.green);
+		
+		int indiceImagen = (this.direccion == 'd') ? 0 : 1; 
+		e.dibujarImagen(img[indiceImagen], this.x, this.y, 0, 0.10);
 	}
 	
 	
@@ -121,16 +130,19 @@ public class Tortuga {
 	        if (this.x - (this.ancho/2) <= bordeIzquierdoIsla) {
 	            this.x = bordeIzquierdoIsla + (this.ancho/2);
 	            cambiarMovimientoHorizontal();
+	            this.direccion='d';
 	        } else if (this.x + (this.ancho/2) >= bordeDerechoIsla) {
 	        
 	            this.x = bordeDerechoIsla - (this.ancho/2);
 	            cambiarMovimientoHorizontal();
+	            this.direccion='i';
 	        }
 	    }
 	}
 	
 	
 	public void cambiarMovimientoHorizontal() {
+		
 		this.movimientoHorizontal*=-1;
 	}
 	

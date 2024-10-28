@@ -1,8 +1,10 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Image;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Personaje {
 	private int x;
@@ -12,6 +14,7 @@ public class Personaje {
 	private int velocidad;
 	private boolean estaSaltando;
 	private char direccion;
+	Image img[];
 	
 	
 	
@@ -24,14 +27,20 @@ public class Personaje {
 		this.velocidad=3;
 		this.estaSaltando = estaSaltando;
 		this.direccion= direccion;
+		this.img = new Image[2];
+		
+		this.img[0] = Herramientas.cargarImagen("principed.png"); // imagen derecha
+		this.img[1] = Herramientas.cargarImagen("principei.png"); // imagen izquierda
 	
 		
 		
 	}
 
 	
-	public void dibujar(Entorno entorno) {
-		entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
+	public void dibujar(Entorno e) {
+		//entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
+		int indiceImagen = (this.direccion == 'd') ? 0 : 1; 
+		e.dibujarImagen(img[indiceImagen], this.x, this.y, 0, 0.10);
 	}
 	
 	public int getX() {
@@ -187,6 +196,8 @@ public class Personaje {
 			if(bordeDerechoPersonaje <=bordeIzquierdoIsla && bordeDerechoPersonaje >=bordeIzquierdoIsla -velocidad) {
 				if(this.y+(this.alto/2) > isla.getY()-(isla.getAlto()/2)  &&  this.y-(this.alto/2) < isla.getY()+(isla.getAlto()/2)) {
 					this.x=(int) bordeIzquierdoIsla-(this.ancho/2);
+					int indiceImagen = (this.direccion == 'd') ? 0 : 1; 
+					this.direccion='d';
 					return true;
 				}
 			}			
@@ -206,6 +217,7 @@ public class Personaje {
 			if(bordeIzquierdoPersonaje >=bordeDerechoIsla && bordeIzquierdoPersonaje <=bordeDerechoIsla +velocidad) {
 				if(this.y-(this.alto/2) < isla.getY()+(isla.getAlto()/2)  &&  this.y+(this.alto/2) > isla.getY()-(isla.getAlto()/2)) {
 					this.x=(int) bordeDerechoIsla+(this.ancho/2);
+					this.direccion='i';
 					return true;
 				}
 			}			
