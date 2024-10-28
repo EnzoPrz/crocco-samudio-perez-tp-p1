@@ -263,7 +263,42 @@ public class Personaje {
 
 	
 	
-	
+//	int w;
+//	for (w=0;w<=gnomos.length-1;w++) {
+//			if(gnomos[w] != null) {
+//				gnomos[w].dibujar(entorno);
+//				
+//				if( !gnomos[w].estaColisionandoPorAbajo(islas)) {
+//					gnomos[w].moverHaciaAbajo(entorno);
+//						
+//				}
+//					
+//					
+//				// SE MUEVEN
+//				if (gnomos[w].estaColisionandoPorAbajo(islas)) {
+//					gnomos[w].mover(islas);
+//				}
+//					
+//				//COLISION gnompos con pep
+//				if(this.pep!=null && colisionar(this.gnomos[w].getX(), this.gnomos[w].getY(), this.pep.getX(), this.pep.getY(), 30)) {
+//					this.gnomos[w]=null;
+//					salvados++;
+//				}	
+//					
+//	//ver esto mañana
+//				
+//				//COLISION gnompos con TORTUGA
+//				if(this.tortugas[r]!=null && colisionar(this.gnomos[w].getX(), this.gnomos[w].getY(), tortugas[r].getX(), tortugas[r].getY(), 30)) {
+//					this.gnomos[w]=null;
+//					//salvados++;
+//				}	
+//				
+//
+//
+//			}
+//			
+//			
+//	}
 	
 	
 	

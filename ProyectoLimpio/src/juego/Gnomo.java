@@ -33,13 +33,13 @@ public class Gnomo {
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
-		this.velocidad = 2;
+		this.velocidad = velocidad;
 		this.desplazamiento = desplazamiento;
 		this.estaCayendo= estaCayendo;
 		this.movimientoHorizontal = movH;
 		this.random = new Random();
 		this.islaActual= islaActual;
-		this.direccionMovimiento = (Math.random() < 0.5) ? IZQUIERDA : DERECHA;
+		this.direccionMovimiento = (Math.random() < 0.8) ? IZQUIERDA : DERECHA;
 		this.puedeCambiarDireccion = true; // Permitir el cambio al principio
 		this.framesSinCambiar = 0; // Contador inicial
 		img= Herramientas.cargarImagen("gnomos.png");
