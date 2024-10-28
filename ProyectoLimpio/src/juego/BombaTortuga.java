@@ -25,6 +25,7 @@ public class BombaTortuga {
 	}
 
 
+<<<<<<< HEAD
 	public BombaTortuga(double x, double y, int ancho, int alto, char direccion, int desplazamiento, double velocidad) {
 		this.x = x;
 		this.y = y;
@@ -62,6 +63,21 @@ public class BombaTortuga {
 
 
 
+=======
+public BombaTortuga(double x, double y, int ancho, int alto, char direccion, int desplazamiento, double velocidad) {
+	this.x = x;
+	this.y = y;
+	this.ancho = ancho;
+	this.alto = alto;
+	this.direccion = direccion;
+	this.desplazamiento = desplazamiento;
+	this.velocidad = velocidad;
+	this.img = new Image[2];
+	
+	this.img[0] = Herramientas.cargarImagen("bombatortugad.png"); // imagen derecha
+	this.img[1] = Herramientas.cargarImagen("bombatortugai.png"); // imagen izquierda
+	}
+>>>>>>> 64e661647fab50f5422a8a84b05e8260423826bf
 
 public void dibujarse(Entorno e) {
 	int indiceImagen = (this.direccion == 'd') ? 0 : 1; 
