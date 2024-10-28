@@ -35,7 +35,7 @@ public class Gnomo {
 		this.estaCayendo= estaCayendo;
 		this.movimientoHorizontal = movH;
 		this.random = new Random();
-		this.islaActual= islaActual;
+//		this.islaActual= islaActual;
 		this.direccionMovimiento = (Math.random() < 0.5) ? IZQUIERDA : DERECHA;
 		this.puedeCambiarDireccion = true; // Permitir el cambio al principio
 		this.framesSinCambiar = 0; // Contador inicial
@@ -142,6 +142,10 @@ public class Gnomo {
 		        puedeCambiarDireccion = true; // Permitir el cambio nuevamente
 		    }
 		}
+		
+//		if(estaColisionandoPorAbajo(this.alto)) {
+//			
+//		}
 	
 }
 	
@@ -197,6 +201,24 @@ public class Gnomo {
 			}			
 		}
 		return false;
+	}
+	
+//	public boolean cayoAlVacio(Entorno entorno) {
+//		double bordeInferiorGnomo = this.y + (this.alto / 2);
+//		if(bordeInferiorGnomo == entorno.getAlto()) {			
+//			return true;
+//		}
+//		else {
+//			return false;
+//		}
+//	}
+	public boolean cayoAlVacio(double alturaEntorno) {
+	    double bordeInferiorGnomo = this.y + (this.alto / 2);
+	    if (bordeInferiorGnomo >= alturaEntorno) {
+	        return true;
+	    } else {
+	        return false;
+	    }
 	}
 
 	

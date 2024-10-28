@@ -2,7 +2,7 @@ package juego;
 
 
 import java.awt.Color;
-import java.awt.Image;
+//import java.awt.Image;
 
 import entorno.Entorno;
 import entorno.InterfaceJuego;
@@ -14,15 +14,22 @@ public class Juego extends InterfaceJuego{
 	private Isla[] islas;
 	private Tortuga tortugas [] = new Tortuga [58];
 	private Gnomo gnomos[] = new Gnomo [40];
-	private int tiempo;
+//	private int tiempo;
 	private DisparoPersonaje disparoPersonaje;
 	private ItemDisparo itemdisparo;
 	private int contadorDisparos= 1000;
 	private int puntaje=0;
 	private int enemigos_eliminados=0;
 	private BombaTortuga bombitas [] = new BombaTortuga [6];
-	private Image fondo;
+//	private Image fondo;
 	private int salvados =0;
+	private int gnomosPerdidos = 0;
+	
+	public final char TECLA_A = 65;
+	public final char TECLA_C = 67;
+	public final char TECLA_D = 68;
+
+
 
 	
 	// Variables y métodos propios de cada grupo
@@ -35,7 +42,7 @@ public class Juego extends InterfaceJuego{
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
-		pep = new Personaje(entorno.ancho()/2-170, entorno.alto()/2+ 110, 20, 40, 0, false, 'i');
+		pep = new Personaje(entorno.ancho()/2-170, entorno.alto()/2+ 110, 20, 40, 0, false, 'i', 20, 1);
 		islas=crearIslas(entorno);
 		//tortugas=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 100, 27, 50, 0, true, 0, 0.5, 'd');
 		//tortuga1=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 100, 27, 50, 0, true, 0, 1);
@@ -72,6 +79,11 @@ public class Juego extends InterfaceJuego{
 			Perder();
 			return;
 		}
+		
+		if (pep.estaColisionandoPorAbajo(entorno)) {
+			Perder();
+			return;
+		}
 			
 		
 		pep.dibujar(entorno);
@@ -103,16 +115,17 @@ public class Juego extends InterfaceJuego{
 		
 		//pep - entorno - islas
 		
-		
-		if(entorno.estaPresionada(entorno.TECLA_DERECHA) && !pep.estaColisionandoPorDerecha(entorno) && !pep.estaColisionandoPorDerecha(islas)) {
+
+		if((entorno.estaPresionada(entorno.TECLA_DERECHA) || entorno.estaPresionada(TECLA_D)) && !pep.estaColisionandoPorDerecha(entorno) && !pep.estaColisionandoPorDerecha(islas)) {
 			pep.moverDerecha(entorno);
 		}
-		if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA) && !pep.estaColisionandoPorIzquierda(entorno) && !pep.estaColisionandoPorIzquierda(islas)) {
+		if((entorno.estaPresionada(entorno.TECLA_IZQUIERDA) || entorno.estaPresionada(TECLA_A)) && !pep.estaColisionandoPorIzquierda(entorno) && !pep.estaColisionandoPorIzquierda(islas)) {
 			pep.moverIzquierda(entorno);
 		}
 	
 		//esto hace que el personaje caiga y salte
 		// esto hace que caiga
+		
 		if (!pep.getEstaSaltando()) {
 			if(!pep.estaColisionandoPorAbajo(islas) ) {
 				pep.moverHaciaAbajo(entorno);
@@ -120,7 +133,8 @@ public class Juego extends InterfaceJuego{
 		}
 		
 		//esto hace que suba con la flecha_arriba
-		if(entorno.sePresiono(entorno.TECLA_ARRIBA) && pep.estaColisionandoPorAbajo(islas) ) {
+
+		if((entorno.sePresiono(entorno.TECLA_ARRIBA) || entorno.estaPresionada(entorno.TECLA_ESPACIO)) && pep.estaColisionandoPorAbajo(islas) ) {
 			pep.moverHaciaArriba(entorno);
 			pep.setEstaSaltando(true);
 		}
@@ -146,7 +160,7 @@ public class Juego extends InterfaceJuego{
 		///////disparo personaje pep ---> disparo
 
 
-		if(entorno.estaPresionado(entorno.BOTON_IZQUIERDO) && this.disparoPersonaje==null && this.contadorDisparos>0 && this.contadorDisparos<=1000) {
+		if((entorno.estaPresionado(entorno.BOTON_IZQUIERDO) || entorno.estaPresionada(TECLA_C)) && this.disparoPersonaje==null && this.contadorDisparos>0 && this.contadorDisparos<=1000) {
 			this.disparoPersonaje=new DisparoPersonaje (this.pep.getX(), this.pep.getY(), 20, 20,1,2, this.pep.getDireccion());
 		}
 		
@@ -183,9 +197,15 @@ public class Juego extends InterfaceJuego{
 						this.bombitas[t]=null;
 					}
 					
-				//COLISION BOMBITAS-PRINCESA
+				//COLISION BOMBITAS-PEP
 					if(this.pep!=null && this.bombitas[t]!=null && colisionar(this.bombitas[t].getX(), this.bombitas[t].getY(), this.pep.getX(), this.pep.getY(),20)) {
 						this.pep=null;
+					}
+					for(int w=0; w<gnomos.length;w++) {
+						if(this.gnomos[w]!=null && this.bombitas[t]!=null && colisionar(this.bombitas[t].getX(), this.bombitas[t].getY(), this.gnomos[w].getX(), this.gnomos[w].getY(),20)) {
+							this.gnomos[w]=null;
+							gnomosPerdidos++;
+						}
 					}
 				}
 				
@@ -251,7 +271,7 @@ public class Juego extends InterfaceJuego{
 					this.disparoPersonaje=null;
 					this.contadorDisparos--;
 					this.puntaje +=2;
-					this.enemigos_eliminados +=1;
+					this.enemigos_eliminados++;
 				}
 			}
 		}
@@ -288,9 +308,9 @@ public class Juego extends InterfaceJuego{
 //			gnomos.mover();
 //		}
 		
-		
+		int alturaEntorno = 600;
 		int w;
-		for (w=0;w<=gnomos.length-1;w++) {
+		for (w=0 ; w<=gnomos.length-1;w++) {
 			if(gnomos[w] != null) {
 				gnomos[w].dibujar(entorno);
 			
@@ -309,12 +329,31 @@ public class Juego extends InterfaceJuego{
 				if(this.pep!=null && colisionar(this.gnomos[w].getX(), this.gnomos[w].getY(), this.pep.getX(), this.pep.getY(), 30)) {
 					this.gnomos[w]=null;
 					salvados++;
+					puntaje+=5;
 				}
-			
+				
+				//COLISION Gnomos perdidos
+				if(gnomos[w].cayoAlVacio(alturaEntorno)){
+					this.gnomos[w]=null;
+					gnomosPerdidos++;
+				}
+				
+				//COLISION Gnomos con tortugas
+				for (r=0;r<=this.tortugas.length-1;r++) {
+					if(tortugas[r] != null){
+						if(colisionar(this.gnomos[w].getX(), this.gnomos[w].getY(), this.tortugas[r].getX(), this.tortugas[r].getY(), 30)) {
+							this.gnomos[w]=null;
+							gnomosPerdidos++;
+						}
+					}
+				}
 			}
 		}
 
-		entorno.escribirTexto("gnomos salvados: " + salvados, 3, 20);
+		entorno.escribirTexto("Gnomos Salvados: " + salvados, 3, 20);
+		entorno.escribirTexto("Gnomos Perdidos: " + gnomosPerdidos, 180, 20);
+		entorno.escribirTexto("Puntaje: " + puntaje, 400, 20);
+		entorno.escribirTexto("Enemigos Eliminados: " + enemigos_eliminados, 550, 20);
 		
 		
 		

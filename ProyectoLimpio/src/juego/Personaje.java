@@ -9,14 +9,20 @@ public class Personaje {
 	private int y;
 	private int ancho;
 	private int alto;
-	private int velocidad;
-	private boolean estaSaltando;
 	private char direccion;
+	private boolean estaSaltando;
+	private int velocidad;
+	private boolean subiendo;
+	
+	/* Probando */
+	
+	private int posicionInicialY;
+	public boolean enAire;
+	private int velocidadSalto;
+    private int velocidadCaida;
 	
 	
-	
-	
-	public Personaje(int x, int y, int ancho, int alto,int velocidad, boolean estaSaltando, char direccion) {
+	public Personaje(int x, int y, int ancho, int alto,int velocidad, boolean estaSaltando, char direccion, int velocidadSalto, int velocidadCaida) {
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
@@ -24,12 +30,58 @@ public class Personaje {
 		this.velocidad=3;
 		this.estaSaltando = estaSaltando;
 		this.direccion= direccion;
-	
+		
+		/* Probando */
+		this.velocidadSalto = velocidadSalto;
+		this.velocidadCaida = velocidadCaida;
+		this.posicionInicialY = y;
+		this.enAire = false;
+		this.subiendo = false;
 		
 		
 	}
-
 	
+	public void salto() {
+    	
+        if (!estaSaltando) {
+            enAire = true;
+            subiendo = true;
+            posicionInicialY = this.y;
+            velocidad = velocidadSalto;
+        }
+    }
+	public void caer() {
+		
+		if (!this.estaSaltando) 
+			this.y += 5; 
+		
+	}
+	
+	public void actualizarSalto() {
+		
+	    if (enAire) {
+	        if (subiendo) {
+	            this.y -= velocidad;
+	            velocidad -= velocidadCaida; // cae mas lento de lo que sube para poder simular una gravedad. 
+
+	            if (velocidad <= 0) {
+	                subiendo = false; // la seteo en false porque hay que bajarla.
+	                velocidad = velocidadCaida;
+	            }
+	        } 
+	        else {
+	            this.y += velocidad;
+	            velocidad += velocidadCaida; // Acelerar descenso
+
+	            if (this.y >= posicionInicialY) {
+	                this.y = posicionInicialY; // una vez que salto hay que volver a la princesa a la posición inicial
+	                enAire = false;
+	                
+	            }
+	        }
+	    }
+	}
+
 	public void dibujar(Entorno entorno) {
 		entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
 	}
