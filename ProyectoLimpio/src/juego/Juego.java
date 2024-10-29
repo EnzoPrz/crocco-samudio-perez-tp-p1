@@ -12,7 +12,7 @@ public class Juego extends InterfaceJuego{
 	private Entorno entorno;
 	private Personaje pep;
 	private Isla[] islas;
-	private Tortuga tortugas [] = new Tortuga [8];
+	private Tortuga tortugas [] = new Tortuga [6];
 	private casaGnomos casaGnomos;
 	private Gnomo gnomos[] = new Gnomo [5];
 	private int tiempo;
@@ -401,12 +401,25 @@ public class Juego extends InterfaceJuego{
 		
 		
 		//////////////////////////////////////REAPARICION DE TORTUGAS Y GNOMOS//////////////////////////////////////
-		// Reaparecer tortugas en sus posiciones originales
+		// Reaparecer tortugas en posiciones aleatorias sobre las islas
 		for (int i = 0; i < tortugas.length; i++) {
 		    if (tortugas[i] == null) {
-		        double x = posicionesInicialesTortugas[i][0];
-		        double y = posicionesInicialesTortugas[i][1];
+		        // Selecciona una isla aleatoria
+		        int islaIndex = (int) (Math.random() * islas.length);
+		        Isla islaSeleccionada = islas[islaIndex];
+
+		        // Genera una posición X aleatoria dentro del ancho de la isla
+		        double x = islaSeleccionada.getX() - islaSeleccionada.getAncho() / 2 + Math.random() * islaSeleccionada.getAncho();
+		        
+		        // Coloca la tortuga justo en el borde superior de la isla
+		        double y = islaSeleccionada.getY() - islaSeleccionada.getAlto() / 2 - 25; // -25 ajusta para la altura de la tortuga
+
+		        // Crear la tortuga en la nueva posición aleatoria
 		        tortugas[i] = new Tortuga(x, y, 27, 50, 0.5, 2, 'd', false, 0.5);
+		        
+		        // Asegura que la tortuga "detecta" estar en colisión con la isla desde el inicio
+		        tortugas[i].setEstaCayendo(false);
+		        tortugas[i].setIslaActual(islaSeleccionada); // Marca la isla actual como base de la tortuga
 		    }
 		}
 
