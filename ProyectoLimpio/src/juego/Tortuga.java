@@ -38,18 +38,11 @@ public class Tortuga {
 		this.img = new Image[2];
 		
 		this.img[0] = Herramientas.cargarImagen("tortugamalad.png"); // imagen derecha
-		this.img[1] = Herramientas.cargarImagen("tortugamalai.png"); // imagen izquierda
-		
-		
-		
-		
-		
+		this.img[1] = Herramientas.cargarImagen("tortugamalai.png"); // imagen izquierda	
 		
 	}
 	
 	public void dibujar(Entorno e) {
-		//entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.green);
-		
 		int indiceImagen = (this.direccion == 'd') ? 0 : 1; 
 		e.dibujarImagen(img[indiceImagen], this.x, this.y, 0, 0.10);
 	}
@@ -186,7 +179,6 @@ public class Tortuga {
 	}
 	
 	
-	
 	public boolean estaColisionandoPorDerecha(Isla[] islas) {
 		for(Isla isla : islas) {
 			if(isla==null) {
@@ -196,7 +188,7 @@ public class Tortuga {
 		    float bordeDerechoIsla = isla.getX() + (isla.getAncho() / 2 );	
 			
 			if(bordeDerechoTortuga <=bordeDerechoIsla && bordeDerechoTortuga >=bordeDerechoIsla -velocidad) {
-				if(this.x - (this.ancho / 2) <  isla.getY() - (isla.getAlto() / 2 )  /* && this.y-(this.alto/2) < isla.getY()-(isla.getAlto()/2)*/) {
+				if(this.x - (this.ancho / 2) <  isla.getY() - (isla.getAlto() / 2 )) {
 					this.x=(int) bordeDerechoIsla-(this.ancho/2);
 					return true;
 				}
@@ -215,7 +207,7 @@ public class Tortuga {
 		    float bordeizquierdoIsla = isla.getX() - (isla.getAncho() / 2);	
 			
 			if(bordeIquierdoTortuga >=bordeizquierdoIsla && bordeIquierdoTortuga <=bordeizquierdoIsla +velocidad) {
-				if(this.x+(this.ancho/2) > isla.getY()+(isla.getAlto()/2) /* &&  this.y-(this.alto) < isla.getY()+(isla.getAlto()*/) {
+				if(this.x+(this.ancho/2) > isla.getY()+(isla.getAlto()/2)) {
 					this.x=(int) bordeizquierdoIsla+(this.ancho/2);
 					return true;
 				}

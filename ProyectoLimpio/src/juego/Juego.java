@@ -3,8 +3,10 @@ package juego;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.util.Random;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 import entorno.InterfaceJuego;
 
 public class Juego extends InterfaceJuego{
@@ -12,7 +14,7 @@ public class Juego extends InterfaceJuego{
 	private Entorno entorno;
 	private Personaje pep;
 	private Isla[] islas;
-	private Tortuga tortugas [] = new Tortuga [6];
+//	private Tortuga tortugas [] = new Tortuga [4];
 	private casaGnomos casaGnomos;
 	private Gnomo gnomos[] = new Gnomo [5];
 	private int tiempo;
@@ -21,7 +23,7 @@ public class Juego extends InterfaceJuego{
 	private int contadorDisparos= 1000;
 	private int puntaje=0;
 	private int enemigos_eliminados=0;
-	private BombaTortuga bombitas [] = new BombaTortuga [6];
+	private BombaTortuga bombitas [] = new BombaTortuga [4];
 	private Image fondo;
 	private int perdidos = 0;
 	private boolean inicio;
@@ -29,29 +31,26 @@ public class Juego extends InterfaceJuego{
 	private int salvados =0;
 	private double[][] posicionesInicialesTortugas;
 	private double[][] posicionesInicialesGnomos;
-	
+	Spawn []pSpawn =new Spawn [8]; //suponiendo 6 puntos de spawn
+	Tortuga tortugas [] = new Tortuga [4];
 	// Variables y métodos propios de cada grupo
 	// ...
 	
 	Juego()
 	{
 		// Inicializa el objeto entorno
-		this.entorno = new Entorno(this, "Proyecto para TP", 800, 600);
+		this.entorno = new Entorno(this, "Gnomos al rescate", 800, 600);
+		fondo= Herramientas.cargarImagen("fondo.png");
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
 		pep = new Personaje(entorno.ancho()/2-170, entorno.alto()/2+ 110, 20, 40, 0, false, 'i');
 		islas=crearIslas(entorno);
+		islas[0].setAncho(160);
 		this.casaGnomos = new casaGnomos (entorno.ancho()/2, entorno.alto()/2-240, 20, 60);
-		//tortugas=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 100, 27, 50, 0, true, 0, 0.5, 'd');
-		//tortuga1=new Tortuga(entorno.ancho()/2, entorno.alto()/2- 100, 27, 50, 0, true, 0, 1);
 		RellenarJuegoConTortugas(tortugas);
 		RellenarJuegoConBombas(bombitas);
 		RellenarJuegoConGnomos(gnomos);
-		
-		//gnomos= new Gnomo(entorno.ancho()/2,entorno.alto()/2-270,20, 60, 0, 0, false, 0.5);
-		//tortugas=crearTortugas(entorno);
-		//RellenarJuegoConDinos(tortugas);
 
 		// Inicia el juego!
 		this.entorno.iniciar();
@@ -76,20 +75,18 @@ public class Juego extends InterfaceJuego{
 		if(pep!=null && iniciojuego==0) {
 			inicio=true;
 			if(inicio) {
-//				entorno.removeAll();
-				//entorno.dibujarRectangulo(entorno.ancho()/2, entorno.alto()/2, 1000, 1000, 0, Color.black);
-				entorno.cambiarFont("Arial", 50, Color.white);
+				entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0, 1.60);
+				entorno.cambiarFont("ALGERIAN", 50, Color.GRAY);
 				entorno.escribirTexto("  MENU", entorno.ancho()/2-100, entorno.alto()/2-200);
-				entorno.cambiarFont("Arial", 40, Color.white);
+				entorno.cambiarFont("ALGERIAN", 40, Color.GRAY);
 				entorno.escribirTexto("  TOCA 'ESCAPE' PARA SALIR", entorno.ancho()/2-400, entorno.alto()/2+160);
-				entorno.cambiarFont("Arial", 40, Color.white);
+				entorno.cambiarFont("ALGERIAN", 40, Color.GRAY);
 				entorno.escribirTexto("  TOCA 'ENTER' PARA COMENZAR", entorno.ancho()/2-400, entorno.alto()/2+80);
-//				entorno.dibujarImagen(letramenu3, 178, 550, 0);
 				if (entorno.sePresiono(entorno.TECLA_ENTER)) {
 					iniciojuego = 1;
 					inicio = false;
 	
-				} else if (entorno.sePresiono(entorno.TECLA_ESCAPE)) { // SI TOCAS LA S SALIS DEL JUEGO
+				} else if (entorno.sePresiono(entorno.TECLA_ESCAPE)) {
 					System.exit(0); // Cerrar la aplicación
 				}
 	
@@ -103,7 +100,7 @@ public class Juego extends InterfaceJuego{
 				
 			}
 		
-		
+		entorno.dibujarImagen(fondo, entorno.ancho()/2, entorno.alto()/2, 0, 1.60);
 		pep.dibujar(entorno);
 		
 		if(salvados==5) {
@@ -123,21 +120,6 @@ public class Juego extends InterfaceJuego{
 				isla.dibujar(entorno);				
 			}
 		}
-		/*
-		for(Tortuga tortuga: tortugas) {
-			if(tortuga!=null) {
-				tortuga.dibujar(entorno);				
-			}
-		}
-		*/
-//		if(tortugas != null) {
-//			tortugas.dibujar(entorno);
-//		}
-		//gnomos.dibujar(entorno);
-		
-		
-		
-		
 		
 		//pep - entorno - islas
 		
@@ -210,7 +192,7 @@ public class Juego extends InterfaceJuego{
 						}
 					}
 					
-					if(this.bombitas[5]==null) {
+					if(this.bombitas[t]==null) {
 						RellenarJuegoConBombas(this.bombitas);
 					}
 					
@@ -221,10 +203,6 @@ public class Juego extends InterfaceJuego{
 						this.bombitas[t]=null;
 					}
 					
-				//COLISION BOMBITAS-pep
-					if(this.pep!=null && this.bombitas[t]!=null && colisionar(this.bombitas[t].getX(), this.bombitas[t].getY(), this.pep.getX(), this.pep.getY(),20)) {
-						this.pep=null;
-					}
 					
 					//COLISION BOMBITAS-PEP
 					if(this.pep!=null && this.bombitas[t]!=null && colisionar(this.bombitas[t].getX(), this.bombitas[t].getY(), this.pep.getX(), this.pep.getY(),20)) {
@@ -266,17 +244,6 @@ public class Juego extends InterfaceJuego{
 		for (r=0;r<=this.tortugas.length-1;r++) {
 			if(tortugas[r] != null) {
 				tortugas[r].dibujar(entorno);
-				System.out.println(tortugas[r].getX());
-			
-//			if (!tortugas[r].estaColisionandoPorAbajo(islas)) {
-//				tortugas[r].moverHaciaAbajo(entorno);
-//				tortugas[r].setEstaCayendo(true);
-//			}
-			
-//			//se mueven
-//			if(tortugas[r].estaColisionandoPorAbajo(islas)) {
-//				tortugas[r].mover();
-//			}
 				
 				if( !tortugas[r].estaColisionandoPorAbajo(islas)) {
 					tortugas[r].moverHaciaAbajo(entorno);
@@ -313,7 +280,7 @@ public class Juego extends InterfaceJuego{
 				}
 			
 			else{
-				if(this.tortugas[8]==null) { 
+				if(this.tortugas[r]==null) { 
 				RellenarJuegoConTortugas(this.tortugas);
 				}
 			}
@@ -331,29 +298,6 @@ public class Juego extends InterfaceJuego{
 		
 		
 	    // Verifica si el gnomo colisiona con las islas
-		
-//		if(!gnomos.getEstaCayendo()) {
-//		    if (!gnomos.estaColisionandoPorAbajo(islas)) {
-//		        gnomos.moverHaciaAbajo(entorno);
-//		
-//		    }
-//	    
-//		}
-//	    if (gnomos.getEstaCayendo() &&  !gnomos.estaColisionandoPorAbajo(islas)) {
-//	    	gnomos.moverHaciaAbajo(entorno);
-//	    	gnomos.setEstaCayendo(false);
-//	    }
-//	    
-//		
-//	    if (!gnomos.getEstaCayendo()&& gnomos.estaColisionandoPorAbajo(islas)) {
-//	    	gnomos.mover();
-//		}
-//		
-//		
-//		if(!gnomos.estaColisionandoPorDerecha(pep)) {
-//			gnomos.mover();
-//		}
-		
 		
 		int w;
 		for (w=0;w<=gnomos.length-1;w++) {
@@ -384,7 +328,7 @@ public class Juego extends InterfaceJuego{
 				
 //				COLISION CON TORTUGAS
 				for (r=0;r<=this.tortugas.length-1;r++) {
-					if(tortugas[r] != null){
+					if(tortugas[r] != null && this.gnomos[w]!=null){
 						if(colisionar(this.gnomos[w].getX(), this.gnomos[w].getY(), this.tortugas[r].getX(), this.tortugas[r].getY(), 30)) {
 							this.gnomos[w]=null;
 							perdidos++;
@@ -396,32 +340,30 @@ public class Juego extends InterfaceJuego{
 			
 		}
 
-		entorno.escribirTexto("gnomos salvados: " + salvados, 3, 20);
-		entorno.escribirTexto("gnomos perdidos: " + perdidos, 3, 100);
+		entorno.escribirTexto("Gnomos salvados: " + salvados, 3, 20);
+		entorno.escribirTexto("Gnomos perdidos: " + perdidos, 3, 100);
 		
 		
 		//////////////////////////////////////REAPARICION DE TORTUGAS Y GNOMOS//////////////////////////////////////
 		// Reaparecer tortugas en posiciones aleatorias sobre las islas
-		for (int i = 0; i < tortugas.length; i++) {
-		    if (tortugas[i] == null) {
-		        // Selecciona una isla aleatoria
-		        int islaIndex = (int) (Math.random() * islas.length);
-		        Isla islaSeleccionada = islas[islaIndex];
-
-		        // Genera una posición X aleatoria dentro del ancho de la isla
-		        double x = islaSeleccionada.getX() - islaSeleccionada.getAncho() / 2 + Math.random() * islaSeleccionada.getAncho();
-		        
-		        // Coloca la tortuga justo en el borde superior de la isla
-		        double y = islaSeleccionada.getY() - islaSeleccionada.getAlto() / 2 - 25; // -25 ajusta para la altura de la tortuga
-
-		        // Crear la tortuga en la nueva posición aleatoria
-		        tortugas[i] = new Tortuga(x, y, 27, 50, 0.5, 2, 'd', false, 0.5);
-		        
-		        // Asegura que la tortuga "detecta" estar en colisión con la isla desde el inicio
-		        tortugas[i].setEstaCayendo(false);
-		        tortugas[i].setIslaActual(islaSeleccionada); // Marca la isla actual como base de la tortuga
-		    }
+		
+		for(int i=0; i< tortugas.length; i++) {
+			if(tortugas[i] ==null) {
+				Random random = new Random();
+				int indiceRandom= random.nextInt(pSpawn.length);
+		        pSpawn[0] = new Spawn(45, entorno.alto()/2-170);
+		        pSpawn[1] = new Spawn(95, entorno.alto()/2-170);
+		        pSpawn[2] = new Spawn(170, entorno.alto()/2-170);
+		        pSpawn[3] = new Spawn(650, entorno.alto()/2-170);
+		        pSpawn[4] = new Spawn(700, entorno.alto()/2-170);
+		        pSpawn[5] = new Spawn(750, entorno.alto()/2-170);
+		        pSpawn[6] = new Spawn(295, entorno.alto()/2);
+		        pSpawn[7] = new Spawn(525, entorno.alto()/2);
+		        tortugas[i]= new Tortuga( pSpawn[indiceRandom].getX(), pSpawn[indiceRandom].getY(), 27, 50, 0.5, 2, 'd', false, 0.5);
+			}
 		}
+		
+		
 
 		// Reaparecer gnomos en sus posiciones originales
 		for (int j = 0; j < gnomos.length; j++) {
@@ -448,7 +390,7 @@ public class Juego extends InterfaceJuego{
 			int expansion=-25*i;
 			for(int j=1 ; j<=i; j++) {
 				x=(e.ancho()-expansion)/(i+1)*j+expansion/2;
-				islas[indice]= new Isla(x,y,125,30);
+				islas[indice]= new Isla(x,y,125,15);
 				indice++;
 			}
 		}
@@ -456,47 +398,31 @@ public class Juego extends InterfaceJuego{
 		return islas;
 	}
 	
-	
-	
-	public void RellenarJuegoConTortugas (Tortuga [] t) {
-		this.posicionesInicialesTortugas = new double[t.length][2];
-		double XparaTortuF1 = 45;
-		double YparaTortuF1 = entorno.alto()/2;
-		double XparaTortuF2 = 95;
-		double YparaTortuF2 = entorno.alto()/2;
-		double XparaTortuF3 = 175;
-		double YparaTortuF3 = entorno.alto()/2;
-		double XparaTortuF4 = 295;
-		double YparaTortuF4 = entorno.alto()/2;
-		
-		for (int i=0; i < t.length; i++) {
-			if (i==0 || i==1) {
-				t[i] = new Tortuga (XparaTortuF1, YparaTortuF1-170, 27, 50, 0.5, 2, 'd', false, 0.5 );
-				 this.posicionesInicialesTortugas[i][0] = XparaTortuF1; 
-		         this.posicionesInicialesTortugas[i][1] = YparaTortuF1 - 170;
-		         XparaTortuF1 = (XparaTortuF1 < entorno.ancho() / 2) ? entorno.ancho() - XparaTortuF1 : entorno.ancho() / 2;
-			}
-			if (i==2 || i==3) {
-				t[i] = new Tortuga (XparaTortuF2, YparaTortuF2-170, 27, 50, 0.5, 1.5, 'd', false, 0.5 );
-				this.posicionesInicialesTortugas[i][0] = XparaTortuF2;
-	            this.posicionesInicialesTortugas[i][1] = YparaTortuF2 - 170;
-	            XparaTortuF2 = (XparaTortuF2 < entorno.ancho() / 2) ? entorno.ancho() - XparaTortuF2 : entorno.ancho() / 2;
-			}
-			if (i==4 || i==5) {
-				t[i] = new Tortuga (XparaTortuF3, YparaTortuF3-170, 27, 50, 0.5, 1, 'd', false, 0.5 );
-				this.posicionesInicialesTortugas[i][0] = XparaTortuF3;
-	            this.posicionesInicialesTortugas[i][1] = YparaTortuF3 - 170;
-	            XparaTortuF3 = (XparaTortuF3 < entorno.ancho() / 2) ? entorno.ancho() - XparaTortuF3 : entorno.ancho() / 2;
-			}
-			if (i==6 || i==7) {
-				t[i] = new Tortuga (XparaTortuF4, YparaTortuF4-50, 27, 50, 0.5, 1, 'd', false, 0.5 );
-				this.posicionesInicialesTortugas[i][0] = XparaTortuF4;
-	            this.posicionesInicialesTortugas[i][1] = YparaTortuF4 - 50;
-	            XparaTortuF4 = (XparaTortuF4 < entorno.ancho() / 2) ? entorno.ancho() - XparaTortuF4 : entorno.ancho() / 2;
-			}
-			
-		}
+	public void RellenarJuegoConTortugas(Tortuga[] t) {
+        // Inicializar los puntos de spawn con sus coordenadas
+        pSpawn[0] = new Spawn(45, entorno.alto()/2-170);
+        pSpawn[1] = new Spawn(95, entorno.alto()/2-170);
+        pSpawn[2] = new Spawn(175, entorno.alto()/2-170);
+        pSpawn[3] = new Spawn(650, entorno.alto()/2-170);
+        pSpawn[4] = new Spawn(700, entorno.alto()/2-170);
+        pSpawn[5] = new Spawn(750, entorno.alto()/2-170);
+        pSpawn[6] = new Spawn(295, entorno.alto()/2);
+        pSpawn[7] = new Spawn(525, entorno.alto()/2);
+
+        // Barajar los puntos de spawn
+        Random random = new Random();
+        for (int i = pSpawn.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            Spawn temp = pSpawn[i];
+            pSpawn[i] = pSpawn[j];
+            pSpawn[j] = temp;
+        }
+        // Crear las tortugas en los primeros 3 puntos de spawn
+        for (int i = 0; i < tortugas.length; i++) {
+            tortugas[i] = new Tortuga(pSpawn[i].getX(), pSpawn[i].getY(),  27, 50, 0.5, 2, 'd', false, 0.5);
+        }
 	}
+
 	
 	public void RellenarJuegoConGnomos(Gnomo [] gno) {
 		this.posicionesInicialesGnomos = new double[gno.length][2];
@@ -599,11 +525,6 @@ public class Juego extends InterfaceJuego{
 	public static void main(String[] args){
 		Juego juego = new Juego();
 	}
-	
-	
-	
-	
-	
 	
 }
 

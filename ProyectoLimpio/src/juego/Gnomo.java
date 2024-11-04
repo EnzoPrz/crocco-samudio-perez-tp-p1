@@ -47,7 +47,6 @@ public class Gnomo {
 	}
 	
 	public void dibujar(Entorno e) {
-		//entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.yellow);
 		 e.dibujarImagen(img, this.x, this.y, 0, 0.10);
 		
 	}
@@ -181,11 +180,6 @@ public class Gnomo {
 	    this.islaActual= islaActual;
 	}
 	
-//	public void moverDerecha(Entorno e) {
-//		this.x+=velocidad;
-//	}
-	
-	
 	
 	public boolean estaColisionandoPorAbajo(Isla[] islas) {		
 		for(Isla isla : islas) {
@@ -212,47 +206,5 @@ public class Gnomo {
 		}
 		return false;
 	}
-	
-//	public boolean cayoAlVacio(double entorno e) {
-//	    double bordeInferiorGnomo = this.y + (this.alto / 2);
-//	    if (bordeInferiorGnomo >= e) {
-//	        return true;
-//	    } else {
-//	        return false;
-//	    }
-//	}
-	
-	
-//	public boolean estaColisionandoPorDerecha(Personaje pep) {	
-//		if(pep==null) {
-//			return false;
-//		}
-//			float bordeDerechoGnomo = this.x + (this.ancho / 2);
-//		    float bordeIzquierdPersonaje = pep.getX() - (pep.getAncho() / 2);	
-//			
-//			if(bordeDerechoGnomo <=bordeIzquierdPersonaje && bordeDerechoGnomo >=bordeIzquierdPersonaje -velocidad) {
-//				if(this.y+(this.alto/2) > pep.getY()-(pep.getAlto()/2)  /*&&  this.y-(this.alto/2) < pep.getY()+(pep.getAlto()/2)*/) {
-//					this.x=(int) bordeIzquierdPersonaje-(this.ancho/2);
-//					return true;
-//				}
-//			}			
-//			return false;
-//		
-//	}
-//	
-//	
-//	public boolean estaColisionandoPorIzquierda(Personaje pep) {
-//			float bordeIzquierdoGnomo = this.x - (this.ancho / 2);
-//		    float bordeDerechoPersonaje = pep.getX() + (pep.getAncho() / 2);	
-//			
-//			if(bordeIzquierdoGnomo >=bordeDerechoPersonaje && bordeIzquierdoGnomo <=bordeDerechoPersonaje +velocidad) {
-//				if(this.y-(this.alto/2) < pep.getY()+(pep.getAlto()/2) /* &&  this.y+(this.alto/2) > pep.getY()-(pep.getAlto()/2)*/) {
-//					this.x=(int) bordeDerechoPersonaje+(this.ancho/2);
-//					return true;
-//				}
-//			}			
-//			return false;
-//	}
-	
 	
 }

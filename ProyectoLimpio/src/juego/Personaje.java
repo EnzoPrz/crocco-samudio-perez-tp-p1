@@ -38,7 +38,6 @@ public class Personaje {
 
 	
 	public void dibujar(Entorno e) {
-		//entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.red);
 		int indiceImagen = (this.direccion == 'd') ? 0 : 1; 
 		e.dibujarImagen(img[indiceImagen], this.x, this.y, 0, 0.10);
 	}
@@ -257,58 +256,5 @@ public class Personaje {
 		}
 		return false;
 	}
-	
-	//////////////////////////////////////
-
-
-	
-	
-//	int w;
-//	for (w=0;w<=gnomos.length-1;w++) {
-//			if(gnomos[w] != null) {
-//				gnomos[w].dibujar(entorno);
-//				
-//				if( !gnomos[w].estaColisionandoPorAbajo(islas)) {
-//					gnomos[w].moverHaciaAbajo(entorno);
-//						
-//				}
-//					
-//					
-//				// SE MUEVEN
-//				if (gnomos[w].estaColisionandoPorAbajo(islas)) {
-//					gnomos[w].mover(islas);
-//				}
-//					
-//				//COLISION gnompos con pep
-//				if(this.pep!=null && colisionar(this.gnomos[w].getX(), this.gnomos[w].getY(), this.pep.getX(), this.pep.getY(), 30)) {
-//					this.gnomos[w]=null;
-//					salvados++;
-//				}	
-//					
-//	//ver esto mañana
-//				
-//				//COLISION gnompos con TORTUGA
-//				if(this.tortugas[r]!=null && colisionar(this.gnomos[w].getX(), this.gnomos[w].getY(), tortugas[r].getX(), tortugas[r].getY(), 30)) {
-//					this.gnomos[w]=null;
-//					//salvados++;
-//				}	
-//				
-//
-//
-//			}
-//			
-//			
-//	}
-	
-	
-	
-	
-	
-	
-	
-
-	
-
-	
 
 }

@@ -1,15 +1,18 @@
 package juego;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.util.Random;
 
 import entorno.Entorno;
+import entorno.Herramientas;
 
 public class Isla {
 	private int x;
 	private int y;
 	private int ancho;
 	private int alto;
+	Image imgisla;
 	
 	
 	
@@ -19,11 +22,12 @@ public class Isla {
 		this.y = y;
 		this.ancho = ancho;
 		this.alto = alto;
+		imgisla= Herramientas.cargarImagen("imagenislas.png");
 	}
 
 
 	public void dibujar(Entorno entorno) {
-		entorno.dibujarRectangulo(x, y, ancho, alto, 0, Color.white);	
+		entorno.dibujarImagen(imgisla, this.x, this.y, 0, 0.35);
 	}
 	
 
