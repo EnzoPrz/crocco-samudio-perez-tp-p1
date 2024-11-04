@@ -14,12 +14,13 @@ public class Personaje {
 	private int velocidad;
 	private boolean estaSaltando;
 	private char direccion;
+	private int AlturaMaxDeSalto;
 	Image img[];
 	
 	
 	
 	
-	public Personaje(int x, int y, int ancho, int alto,int velocidad, boolean estaSaltando, char direccion) {
+	public Personaje(int x, int y, int ancho, int alto,int velocidad, boolean estaSaltando, char direccion, int AlturaMaxDeSalto) {
 		this.x = x;
 		this.y = y;
 		this.ancho = ancho;
@@ -27,6 +28,7 @@ public class Personaje {
 		this.velocidad=3;
 		this.estaSaltando = estaSaltando;
 		this.direccion= direccion;
+		this.AlturaMaxDeSalto= AlturaMaxDeSalto;
 		this.img = new Image[2];
 		
 		this.img[0] = Herramientas.cargarImagen("principed.png"); // imagen derecha
@@ -255,6 +257,15 @@ public class Personaje {
 			return true;
 		}
 		return false;
+	}
+
+	public int getAlturaMaxDeSalto() {
+		return AlturaMaxDeSalto;
+		
+	}
+
+	public void setAlturaMaxDeSalto(int AlturaMaxDeSalto) {
+		this.AlturaMaxDeSalto=AlturaMaxDeSalto;
 	}
 
 }

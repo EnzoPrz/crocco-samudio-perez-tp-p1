@@ -44,7 +44,7 @@ public class Juego extends InterfaceJuego{
 		
 		// Inicializar lo que haga falta para el juego
 		// ...
-		pep = new Personaje(entorno.ancho()/2-170, entorno.alto()/2+ 110, 20, 40, 0, false, 'i');
+		pep = new Personaje(entorno.ancho()/2-170, entorno.alto()/2+ 110, 20, 40, 0, false, 'i',0);
 		islas=crearIslas(entorno);
 		islas[0].setAncho(160);
 		this.casaGnomos = new casaGnomos (entorno.ancho()/2, entorno.alto()/2-240, 20, 60);
@@ -130,7 +130,7 @@ public class Juego extends InterfaceJuego{
 		if(entorno.estaPresionada(entorno.TECLA_IZQUIERDA) && !pep.estaColisionandoPorIzquierda(entorno) && !pep.estaColisionandoPorIzquierda(islas)) {
 			pep.moverIzquierda(entorno);
 		}
-	
+		
 		//esto hace que el personaje caiga y salte
 		// esto hace que caiga
 		if (!pep.getEstaSaltando()) {
@@ -139,29 +139,21 @@ public class Juego extends InterfaceJuego{
 			}
 		}
 		
-		//esto hace que suba con la flecha_arriba
-		if(entorno.sePresiono(entorno.TECLA_ARRIBA) && pep.estaColisionandoPorAbajo(islas) ) {
-			pep.moverHaciaArriba(entorno);
+		if(entorno.sePresiono(entorno.TECLA_ARRIBA) && pep.estaColisionandoPorAbajo(islas) && !pep.getEstaSaltando()) {
 			pep.setEstaSaltando(true);
+			pep.setAlturaMaxDeSalto(pep.getY()-140);
 		}
 		
-		//esto hace que baje 
-		if (pep.getEstaSaltando()) {
-			if(entorno.estaPresionada(entorno.TECLA_ABAJO)) {
-				pep.moverHaciaAbajo(entorno);
-				pep.setEstaSaltando(false);
-			}
-		}
 		
-		// esto hace tope para que no pueda subir a la ultima isla
-		if (pep.getEstaSaltando()) {
-			if (!pep.estaColisionandoPorArriba(islas) && !pep.estaColisionandoPorArriba(entorno)&& pep.getY() > 270) {
-				pep.moverHaciaArriba(entorno) ;
-			}else {
-				pep.setEstaSaltando(false);
-				
-			}
+		if(pep.getEstaSaltando()&&  pep.getY() > 250) {
+			pep.moverHaciaArriba(entorno);
+		}else {
+			pep.setEstaSaltando(false);
 		}
+		if(pep.estaColisionandoPorArriba(islas) || pep.getAlturaMaxDeSalto()>=(pep.getY()- pep.getAlto()/2)) {
+			pep.setEstaSaltando(false);
+		}
+
 
 		///////disparo personaje pep ---> disparo
 
@@ -285,6 +277,7 @@ public class Juego extends InterfaceJuego{
 				}
 			}
 		}
+		entorno.cambiarFont("Arial", 12, Color.white);
 		entorno.escribirTexto("Puntaje: "+ puntaje, 3, 40);
 		entorno.escribirTexto("Enemigos eliminados: " + enemigos_eliminados, 3, 60);
 		entorno.escribirTexto("Tiempo en segundos: "+ entorno.numeroDeTick()/100, 3, 80);
